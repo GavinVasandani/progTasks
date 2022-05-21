@@ -157,12 +157,18 @@ BNode* finalSimplify (BNode* pntr) {
         while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) { //so while loop should repeat as long as subtrees are identical and pntr left, right isnt nullptr as that point we're most simplified possible and cant simplify further
             pntr = pntr->left; //if all these conditions occur then we have identical so pntr is pntr left and we repeat while loop condition
         }
-        return pntr; //pntr->left is going to be the new head of the tree
+        return pntr; 
     }
+
+    //if (compareTree(pntr->left,pntr->right)) {
+    //    pntr = pntr->left;
+    //    return pntr; //pntr->left is going to be the new head of the tree
         //then we must also repeat compareTree for remainder of this tree
         //or should we continue comparison and take the parent node that is the closest to leaf as long as they're completely identical
         //so taking x3 parent directly instead of getting x2 as head of tree and then comparing its children to get x3 as head.
         //nvm repeating makes most sense so that compareTree just has to output either 1, 0
+    //    if ()
+    //}
     else { //if we dont have equivalence we output tree as it is, so we only use the if statement so that we can have the else output the tree if we have no equivalence so we can differentiate between pntr outputted from while loop and pntr from else statement which was the original pntr.
         return pntr;
     }
