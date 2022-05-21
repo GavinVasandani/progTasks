@@ -127,7 +127,7 @@ int main() {
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->right)<<endl;
+    cout<<(bt->right->val)<<endl;
 
     cout << eval_bt(bt, "010") << endl; //should output 1
     cout << eval_bt(bt, "000") << endl; //should output 0

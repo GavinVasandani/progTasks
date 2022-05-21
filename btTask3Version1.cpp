@@ -28,7 +28,7 @@ vector<string> find_direction(string word){
     return direction;
 }
 
-void updateVal (BNode* pntr, vector<string>direction, int i) {
+void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { //any combo of 0,1s we input must give 1 at the end because we only input combos that give 1, so base case is 1 is given to value of the leaf node (node which has nullptr next)
         pntr->val = "1";
@@ -74,16 +74,37 @@ BNode* below (int numofParam, int count) { //this builds the full tree and by de
 string parser (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
     //outputs the value of the bottom node
 
-    if((pntr->right == nullptr) && (pntr->left == nullptr)) {
-        return pntr->val;
+    if((pntr->right == nullptr) && (pntr->left == nullptr)) { //should both be nullptr or is 1 enough?
+        return pntr->val; //so this means we're in leaf node, so pntr is pointing to a leaf node
+       // if ((pntr->val //no we need to start at node right before leafs
     }
     else if (direction.at(i)=="0") { //if vector that contains this specific input has a 0 then we go left, if not then else go right and recur function
         return parser(pntr->left,direction,i+1);
     }
     else {
-        return parser(pntr->right,direction,i+1);
-    } //this will make sure we parse all the way to the bottom and output the value
+        return parser(pntr->right,direction,i+1); 
+        //we only want to do this for the leaves not every node
+      //  if ((pntr->right->val) == (pntr->left->val)) { 
 
+        }
+} //this will make sure we parse all the way to the bottom and output the value
+
+BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
+
+    if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
+        if((pntr->left->val) == (pntr->right->val)) {
+            pntr->val = pntr->left->val; //so we reassign value of parent
+            //so we set the children nodes to nullptr
+            pntr->left = nullptr;
+            pntr->right = nullptr; 
+            //execute function to simplify tree
+        }
+    }
+    else {
+        parserChecker(pntr->left);
+        parserChecker(pntr->right); //fine no stack overflow
+    }
+    return pntr;
 }
 
 //tree node counter
@@ -107,8 +128,11 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
     int numofParam = (fvalues.at(0)).size(); //number of parameters, so this checks the size of the first input combo of 0,1s
 
     BNode* topN = below(numofParam,0); //creates initial tree with 0s in all leaf nodes and x(number) as val in the other branch nodes
-    return checker (topN, fvalues); //changes leaf nodes to have 1 if necessary based on what input was and outputs pointer holding address to top node of modified tree
-
+    //return checker (topN, fvalues); //changes leaf nodes to have 1 if necessary based on what input was and outputs pointer holding address to top node of modified tree
+    //send output of checker into commonChecker
+    //output of checker func is a pointer so: 
+    return parserChecker(checker(topN, fvalues));
+    
 }
 
 string eval_bt(BNode* bt, const string& input) {
