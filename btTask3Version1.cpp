@@ -122,7 +122,6 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
     return pntr;
 }
 
-
 //function to repeat parserChecker x-1 times where x is number of parameters
 
 BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
@@ -133,6 +132,35 @@ BNode* repeatCheck (int numofParam, BNode* currentpntr) {
     return currentpntr; //this is the address of the head of the simplified tree
 }
 
+//function to compare 2 subtrees
+//so we get 2 trees given by the pointers a, b
+
+int compareTree (BNode* a, BNode* b) {
+
+    if (a == nullptr && b == nullptr) {
+        return 1; //default output is true because too reach nullptr we must've parsed down the trees such that we get nullptr
+    }
+    else if (a->val==b->val) {
+        return (compareTree(a->left, b->left) && compareTree(a->right, b->right)); //so bool func, if one of them is not equal then output is false
+    }
+    else {
+        return 0;
+    }
+    
+}
+
+//to get pointers to the head of the subtrees for now we'll just take what's below head of current tree but technically this code should work anywhere in the tree not only for x2 which is children of head of tree
+BNode* finalSimplify (BNode* pntr) {
+
+    if (compareTree(pntr->left,pntr->right)) {
+        return pntr->left; //pntr->left is going to be the new head of the tree
+    }
+    else {
+        return pntr;
+    }
+}
+
+//so after repeatCheck we want to run through finalSimplify
 
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
     
@@ -150,8 +178,12 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 
     //this function gets the pointer to head of tree and sends it to the simplification function to check for common children
     BNode* currentpntr = checker(topN, fvalues);
-    return repeatCheck(numofParam, currentpntr);
+    currentpntr = repeatCheck(numofParam, currentpntr);
+    return finalSimplify(currentpntr); //outputs fully simplified tree
 
+    //for tree without final simplification by comparing subtrees uncomment:
+    //return repeatCheck(numofParam,currentpntr);
+    
     //currentpntr = parserChecker(currentpntr);
     //return currentpntr;
     //return parserChecker(currentpntr);
@@ -173,10 +205,10 @@ int main() {
     vector<string>fvalues;
     string row;
 
-    //row = "100";
-    //fvalues.push_back(row);
-    //row = "101";
-    //fvalues.push_back(row);
+    row = "010";
+    fvalues.push_back(row);
+    row = "011";
+    fvalues.push_back(row);
     row = "110";
     fvalues.push_back(row);
     row = "111";
@@ -186,10 +218,10 @@ int main() {
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    //cout<<(bt->right->val)<<endl;
+    cout<<(bt->right->val)<<endl;
 
     cout << eval_bt(bt, "001") << endl; //should output 0
-    cout << eval_bt(bt, "111") << endl; //should output 1
+    cout << eval_bt(bt, "110") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt);
-    
+    //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }
