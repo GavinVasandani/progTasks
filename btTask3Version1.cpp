@@ -18,7 +18,7 @@ vector<string> find_direction(string word){
     string word_i;
     vector<string>direction; //list containing what direction to go in (1 = R, 0 = L)
  
-    for(int i = 0; i < word.size(); i++){
+    for(int i = 0; i < word.size(); i++){ //word.size() tells us the number of parameters 
  
         word_i = "";
         word_i.push_back(word[i]);
@@ -89,6 +89,20 @@ string parser (BNode* pntr, vector<string>direction, int i) { //this checks whet
         }
 } //this will make sure we parse all the way to the bottom and output the value
 
+//tree node counter
+
+int counterN(BNode* t) {
+    if (t==nullptr) { //checks if pointer which holds address to a node is null. Leaf node has an address but child of leaf node doesn't exist so it will be null so 0 count for that
+        return 0; 
+    }
+
+    else {
+        return 1+counterN(t->left)+counterN(t->right); //so we go left node and we add 1 for that node and then we check the children of the left node, if doesnt exist then only 1+0+0 is outputted for this stack.
+    }
+}
+
+//checks if children are common and if so replaces the parent with child
+
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
     if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
@@ -103,21 +117,22 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
     else {
         parserChecker(pntr->left);
         parserChecker(pntr->right); //fine no stack overflow
+        //parserChecker(pntr->left);
     }
     return pntr;
 }
 
-//tree node counter
 
-int counterN(BNode* t) {
-    if (t==nullptr) { //checks if pointer which holds address to a node is null. Leaf node has an address but child of leaf node doesn't exist so it will be null so 0 count for that
-        return 0; 
-    }
+//function to repeat parserChecker x-1 times where x is number of parameters
 
-    else {
-        return 1+counterN(t->left)+counterN(t->right); //so we go left node and we add 1 for that node and then we check the children of the left node, if doesnt exist then only 1+0+0 is outputted for this stack.
+BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
+
+    for (int i = 0; i<numofParam-1; i++) { //so if we have 3 input then this will loop twice, also string word argument is given by number of param in build_bt func
+        currentpntr = parserChecker(currentpntr); //so we sent in the pointer to the head of the tree, we simplify one time and then resend in the simplified tree back into to further simplify if possible. 
     }
+    return currentpntr; //this is the address of the head of the simplified tree
 }
+
 
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
     
@@ -131,7 +146,15 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
     //return checker (topN, fvalues); //changes leaf nodes to have 1 if necessary based on what input was and outputs pointer holding address to top node of modified tree
     //send output of checker into commonChecker
     //output of checker func is a pointer so: 
-    return parserChecker(checker(topN, fvalues));
+    //return parserChecker(checker(topN, fvalues));
+
+    //this function gets the pointer to head of tree and sends it to the simplification function to check for common children
+    BNode* currentpntr = checker(topN, fvalues);
+    return repeatCheck(numofParam, currentpntr);
+
+    //currentpntr = parserChecker(currentpntr);
+    //return currentpntr;
+    //return parserChecker(currentpntr);
     
 }
 
@@ -150,10 +173,10 @@ int main() {
     vector<string>fvalues;
     string row;
 
-    row = "010";
-    fvalues.push_back(row);
-    row = "011";
-    fvalues.push_back(row);
+    //row = "100";
+    //fvalues.push_back(row);
+    //row = "101";
+    //fvalues.push_back(row);
     row = "110";
     fvalues.push_back(row);
     row = "111";
@@ -163,10 +186,10 @@ int main() {
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    //cout<<(bt->right->right)<<endl;
+    //cout<<(bt->right->val)<<endl;
 
     cout << eval_bt(bt, "001") << endl; //should output 0
-    cout << eval_bt(bt, "110") << endl; //should output 1
+    cout << eval_bt(bt, "111") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt);
     
 }
