@@ -146,6 +146,7 @@ int compareTree (BNode* a, BNode* b) {
     else {
         return 0;
     }
+    
 }
 
 //to get pointers to the head of the subtrees for now we'll just take what's below head of current tree but technically this code should work anywhere in the tree not only for x2 which is children of head of tree
@@ -158,6 +159,10 @@ BNode* finalSimplify (BNode* pntr) {
         }
         return pntr; //pntr->left is going to be the new head of the tree
     }
+        //then we must also repeat compareTree for remainder of this tree
+        //or should we continue comparison and take the parent node that is the closest to leaf as long as they're completely identical
+        //so taking x3 parent directly instead of getting x2 as head of tree and then comparing its children to get x3 as head.
+        //nvm repeating makes most sense so that compareTree just has to output either 1, 0
     else { //if we dont have equivalence we output tree as it is, so we only use the if statement so that we can have the else output the tree if we have no equivalence so we can differentiate between pntr outputted from while loop and pntr from else statement which was the original pntr.
 
         pntr->left = finalSimplify(pntr->left); //so if output is same as input then pntr->left = pntr->left (no change) if there is change we output fully simplified left and then we assign that to pntr->left;
@@ -167,15 +172,30 @@ BNode* finalSimplify (BNode* pntr) {
 }
 
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
+    
+    //Inserting tree nodes
+    //checking for a 1
+    //create the tree root aka top node
 
     int numofParam = (fvalues.at(0)).size(); //number of parameters, so this checks the size of the first input combo of 0,1s
 
     BNode* topN = below(numofParam,0); //creates initial tree with 0s in all leaf nodes and x(number) as val in the other branch nodes
+    //return checker (topN, fvalues); //changes leaf nodes to have 1 if necessary based on what input was and outputs pointer holding address to top node of modified tree
+    //send output of checker into commonChecker
+    //output of checker func is a pointer so: 
+    //return parserChecker(checker(topN, fvalues));
 
     //this function gets the pointer to head of tree and sends it to the simplification function to check for common children
     BNode* currentpntr = checker(topN, fvalues);
     currentpntr = repeatCheck(numofParam, currentpntr);
     return finalSimplify(currentpntr); //outputs fully simplified tree
+
+    //for tree without final simplification by comparing subtrees uncomment:
+    //return repeatCheck(numofParam,currentpntr);
+    
+    //currentpntr = parserChecker(currentpntr);
+    //return currentpntr;
+    //return parserChecker(currentpntr);
     
 }
 
