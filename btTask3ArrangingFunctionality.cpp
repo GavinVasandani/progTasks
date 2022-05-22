@@ -29,6 +29,11 @@ vector<string> find_direction(string word){
 }
 
 void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
+    
+    
+    //we need to rearrange the input vector direction to be in the order we want for rearrangement. Then that will be followed by this func
+    //so keep this func the same.
+
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { //any combo of 0,1s we input must give 1 at the end because we only input combos that give 1, so base case is 1 is given to value of the leaf node (node which has nullptr next)
         pntr->val = "1";
@@ -45,9 +50,13 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
 
 BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
 
-  for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
+  for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1 so fvalues.size() is number of inputs that give 1
 
+    //must change vector direction for rearrangement
     vector<string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
+    
+    //we need to rearrange the input vector direction to be in the order we want for rearrangement. Then that will be followed by this func
+
     updateVal(t,direction,0);
     
     }
@@ -58,12 +67,15 @@ BNode* below (int numofParam, int count) { //this builds the full tree and by de
     BNode* b; //pointer b which holds address to a variable that is type BNode
     b = new BNode; //pointer holds address to a temporary variable (new) BNode
     if (count==numofParam) { //so loop ends once count = number of parameters
+    //so count and numofParam stays same even after rearranging
+    //the process of making all leaves initially = 0 is fine
         b->val = "0";
         b->left = nullptr;
         b->right = nullptr;
     }
     else { //this names each node aka the val is assigned to a string being x(number)
-        string nodeVal = "x"+to_string(count+1);
+
+        string nodeVal = "x"+to_string(count+1); //this should be to_string(current index of fvalues input) not count+1
         b->val = nodeVal;
         b->left = below(numofParam,count+1);
         b->right = below(numofParam,count+1);
@@ -100,9 +112,6 @@ int counterN(BNode* t) {
         return 1+counterN(t->left)+counterN(t->right); //so we go left node and we add 1 for that node and then we check the children of the left node, if doesnt exist then only 1+0+0 is outputted for this stack.
     }
 }
-
-//checks if children are common and if so replaces the parent with child
-
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
     //we havent considered case where we have 1 leaf node alone so parent has 2 children, 1 is leaf, 1 is another parent node and we still run program for leaf node even though it doesnt have any children so it shouldn't run as the if condition will not apply so we get segmentation fault.
@@ -131,9 +140,6 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
     }
     return pntr;
 }
-
-//function to repeat parserChecker x-1 times where x is number of parameters
-
 BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
 
     for (int i = 0; i<numofParam-1; i++) { //so if we have 3 input then this will loop twice, also string word argument is given by number of param in build_bt func
@@ -141,10 +147,6 @@ BNode* repeatCheck (int numofParam, BNode* currentpntr) {
     }
     return currentpntr; //this is the address of the head of the simplified tree
 }
-
-//function to compare 2 subtrees
-//so we get 2 trees given by the pointers a, b
-
 int compareTree (BNode* a, BNode* b) {
 
     if (a == nullptr && b == nullptr) {
@@ -157,8 +159,6 @@ int compareTree (BNode* a, BNode* b) {
         return 0;
     }
 }
-
-//to get pointers to the head of the subtrees for now we'll just take what's below head of current tree but technically this code should work anywhere in the tree not only for x2 which is children of head of tree
 BNode* finalSimplify (BNode* pntr) {
 
     if (compareTree(pntr->left,pntr->right)) { //so if we have first initial equivalence we run for loop
