@@ -114,22 +114,30 @@ int main() {
     vector<string>fvalues;
     string row;
 
-    row = "010";
+    row = "0001";
     fvalues.push_back(row);
-    row = "011";
+    row = "0011";
     fvalues.push_back(row);
-    row = "110";
+    row = "0100";
     fvalues.push_back(row);
-    row = "111";
+    row = "0110";
+    fvalues.push_back(row);
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1011";
+    fvalues.push_back(row);
+    row = "1110";
+    fvalues.push_back(row);
+    row = "1111";
     fvalues.push_back(row);
   
     BNode* bt;
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->val)<<endl;
+    cout<<(bt->left->left->right->val)<<endl;
 
-    cout << eval_bt(bt, "010") << endl; //should output 1
-    cout << eval_bt(bt, "000") << endl; //should output 0
+    cout << eval_bt(bt, "0100") << endl; //should output 1
+    cout << eval_bt(bt, "0000") << endl; //should output 0
     
 }

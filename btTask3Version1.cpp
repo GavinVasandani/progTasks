@@ -165,78 +165,11 @@ BNode* finalSimplify (BNode* pntr) {
         //nvm repeating makes most sense so that compareTree just has to output either 1, 0
     else { //if we dont have equivalence we output tree as it is, so we only use the if statement so that we can have the else output the tree if we have no equivalence so we can differentiate between pntr outputted from while loop and pntr from else statement which was the original pntr.
 
-      //  new_pntr = pntr;
-
-     //   new_pntr = new_pntr->left;
-     //   pntr->left = finalSimplify(new_pntr); //so if output is same as input then pntr->left = pntr->left (no change) if there is change we output fully simplified left and then we assign that to pntr->left;
-           
-     //   new_pntr = new_pntr->right;
-     //   pntr->right = finalSimplify(new_pntr);
-///////////////
-
         pntr->left = finalSimplify(pntr->left); //so if output is same as input then pntr->left = pntr->left (no change) if there is change we output fully simplified left and then we assign that to pntr->left;
         pntr->right = finalSimplify(pntr->right);
-
-//why do we need while loop anyways we'll be in else statement if we dont have identical so it should automatically repeat and go further down
-
-        //maybe add something here so that eventhough subtree isn't equivalent we try for subtrees of the children of the head
-        //maybe while loop that repeats on the condition that compareTree = 0 meaning we dont yet have equivalence so we keep on going down the tree to find it if we reach nullptr then we stop and then 100% no equivalence anywhere
-        //pntr is still main tree which is simplified, new_pntr is just another value assigned to pntr value for pntr
-        while (compareTree(new_pntr->left,new_pntr->right)==0 && (new_pntr->left!=nullptr) && (new_pntr->right!=nullptr)) {
-           //maybe if we know that left and right subtree from head aren't equal we can ignore the head and split into 2 subtrees as the heads so:
-           new_pntr = new_pntr->left;
-           pntr->left = finalSimplify(new_pntr); //so if output is same as input then pntr->left = pntr->left (no change) if there is change we output fully simplified left and then we assign that to pntr->left;
-           
-           new_pntr = new_pntr->right;
-           pntr->right = finalSimplify(new_pntr); //we repeat but for right side if we have change or simplification then its assigned to rightside if not then same input is outputted so no change
-
-           //no need for if statement here as finalSimplify does that already
-           if (compareTree(new_pntr->left, new_pntr->right)) {
-               finalSimplify(new_pntr); //output of this is original tree aka same tree as input if no identical
-           }
-           
-            //maybe if we can do 1 extra aka 1 extra in front of the while condition aka the while condition lags by 1 compared to compareTree func inside while loop
-            if (compareTree(new_pntr->left->left, new_pntr->left->right)) {
-                
-                //if they are equivalent they could potentially be multiple identical subtrees so recur into finalSimplify func
-                finalSimplify(new_pntr->left)
-
-                //new_pntr->left = new_pntr->left->left; //as pntr->left->left and pntr->left->right are equal and as its equivalent then pntr->left is replaced
-                pntr->left = new_pntr->left->left; //so pntr main simplified tree is being modified
-            } //if not equivalent then pntr stays as it is and none of its children change so no change to what pntr is assigned too.
-            else {
-                //make so that we repeat check but for lower leaf
-                new_pntr = new_pntr->left; //fine we can do new_pntr left for this case and new_pntr right for other if statement
-            //so maybe we need to separately parse left and right sides
-            }
-            
-
-
-            //this is completely independent on case above, and so we independently check if right child subtrees are equivalent
-            if (compareTree(pntr->right->left, pntr->right->right)) {
-                pntr->right = pntr->right->left;
-            } //if not equivalent then pntr stays as it is
-
-            else if (compareTree(pntr->right->left, pntr->right->right)) {
-                pntr->right = pntr->right->left;
-            }
-        }
-        
-        compareTree(pntr->left, )
-        
-        return pntr;
+        return pntr; //so if nothing is identical, so we'll have nullptr at bottom so while will not execute and we'll output pntr so no change and if not nullptr but its leaves with values 0,1 then not equal so while will not execute so output will be same as input so no change.
     }
 }
-
-//BNode* parserfinalSimplify (BNode* pntr) {
-
-//    else {
-//        parserfinalSimplify(pntr->left)
-//    }
-
-//}
-
-//so after repeatCheck we want to run through finalSimplify
 
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
     
@@ -281,23 +214,31 @@ int main() {
     vector<string>fvalues;
     string row;
 
-    row = "001";
+    row = "0001";
     fvalues.push_back(row);
-    row = "011";
+    row = "0011";
     fvalues.push_back(row);
-    row = "101";
+    row = "0101";
     fvalues.push_back(row);
-    row = "111";
+    row = "0111";
+    fvalues.push_back(row);
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1011";
+    fvalues.push_back(row);
+    row = "1110";
+    fvalues.push_back(row);
+    row = "1111";
     fvalues.push_back(row);
   
     BNode* bt;
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->val)<<endl;
+    cout<<(bt->right->right->val)<<endl;
 
-    cout << eval_bt(bt, "001") << endl; //should output 1
-    cout << eval_bt(bt, "110") << endl; //should output 0
+    cout << eval_bt(bt, "0000") << endl; //should output 0
+    cout << eval_bt(bt, "0011") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt);
     //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }
