@@ -105,8 +105,17 @@ int counterN(BNode* t) {
 
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
-    if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
+    //we havent considered case where we have 1 leaf node alone so parent has 2 children, 1 is leaf, 1 is another parent node and we still run program for leaf node even though it doesnt have any children so it shouldn't run as the if condition will not apply so we get segmentation fault.
+    //As if node is leaf node with val = 1, pntr->left->left = nullptr isnt possible, only pntr->left exists.
+    //This should be solved by:
+    //so we reordered so that leaf would not have to deal or check with condition where pntr->left->left == nullptr first.
+    if(pntr->left==nullptr && pntr->right==nullptr) {
+        return pntr;
+    }
+    
+    else if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) { //why do we need this condition? because are only considering values in leaves not branch nodes
         if((pntr->left->val) == (pntr->right->val)) {
+
             pntr->val = pntr->left->val; //so we reassign value of parent
             //so we set the children nodes to nullptr
             pntr->left = nullptr;
@@ -114,9 +123,10 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
             //execute function to simplify tree
         }
     }
+    
     else {
-        parserChecker(pntr->left);
-        parserChecker(pntr->right); //fine no stack overflow
+        pntr->left = parserChecker(pntr->left);
+        pntr->right = parserChecker(pntr->right); //fine no stack overflow
         //parserChecker(pntr->left);
     }
     return pntr;
@@ -194,21 +204,21 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "0000";
+    row = "0100";
     fvalues.push_back(row);
-    row = "0011";
-    fvalues.push_back(row);
-    row = "0101";
+    row = "0001";
     fvalues.push_back(row);
     row = "0110";
     fvalues.push_back(row);
+    row = "0011";
+    fvalues.push_back(row);
+    row = "0111";
+    fvalues.push_back(row);
     row = "1001";
     fvalues.push_back(row);
-    row = "1010";
-    fvalues.push_back(row);
-    row = "1100";
-    fvalues.push_back(row);
     row = "1110";
+    fvalues.push_back(row);
+    row = "1011";
     fvalues.push_back(row);
     row = "1111";
     fvalues.push_back(row);
@@ -217,7 +227,7 @@ int main() { //havent considered case where we have no identical subtrees in ent
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->val)<<endl;
+    cout<<(bt->right->right->right->val)<<endl;
 
     cout << eval_bt(bt, "0000") << endl; //should output 0
     cout << eval_bt(bt, "1111") << endl; //should output 1
