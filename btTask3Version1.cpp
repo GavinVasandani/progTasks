@@ -189,22 +189,24 @@ string eval_bt(BNode* bt, const string& input) {
 
 }
 
-int main() {
+int main() { //havent considered case where we have no identical subtrees in entire tree
 
     vector<string>fvalues;
     string row;
 
-    row = "0001";
+    row = "0000";
     fvalues.push_back(row);
     row = "0011";
     fvalues.push_back(row);
     row = "0101";
     fvalues.push_back(row);
-    row = "0111";
+    row = "0110";
+    fvalues.push_back(row);
+    row = "1001";
     fvalues.push_back(row);
     row = "1010";
     fvalues.push_back(row);
-    row = "1011";
+    row = "1100";
     fvalues.push_back(row);
     row = "1110";
     fvalues.push_back(row);
@@ -215,10 +217,10 @@ int main() {
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->right->val)<<endl;
+    cout<<(bt->val)<<endl;
 
     cout << eval_bt(bt, "0000") << endl; //should output 0
-    cout << eval_bt(bt, "0011") << endl; //should output 1
+    cout << eval_bt(bt, "1111") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt);
     //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }

@@ -105,8 +105,17 @@ int counterN(BNode* t) {
 
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
-    if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
+    //we havent considered case where we have 1 leaf node alone so parent has 2 children, 1 is leaf, 1 is another parent node and we still run program for leaf node even though it doesnt have any children so it shouldn't run as the if condition will not apply so we get segmentation fault.
+    //As if node is leaf node with val = 1, pntr->left->left = nullptr isnt possible, only pntr->left exists.
+    //This should be solved by:
+    //so we reordered so that leaf would not have to deal or check with condition where pntr->left->left == nullptr first.
+    if(pntr->left==nullptr && pntr->right==nullptr) {
+        return pntr;
+    }
+    
+    else if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) { //why do we need this condition? because are only considering values in leaves not branch nodes
         if((pntr->left->val) == (pntr->right->val)) {
+
             pntr->val = pntr->left->val; //so we reassign value of parent
             //so we set the children nodes to nullptr
             pntr->left = nullptr;
@@ -114,9 +123,10 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
             //execute function to simplify tree
         }
     }
+    
     else {
-        parserChecker(pntr->left);
-        parserChecker(pntr->right); //fine no stack overflow
+        pntr->left = parserChecker(pntr->left);
+        pntr->right = parserChecker(pntr->right); //fine no stack overflow
         //parserChecker(pntr->left);
     }
     return pntr;
@@ -134,53 +144,6 @@ BNode* repeatCheck (int numofParam, BNode* currentpntr) {
 
 //function to compare 2 subtrees
 //so we get 2 trees given by the pointers a, b
-
-int compareTree (BNode* a, BNode* b) {
-
-    if (a == nullptr && b == nullptr) {
-        return 1; //default output is true because too reach nullptr we must've parsed down the trees such that we get nullptr
-    }
-    else if (a->val==b->val) {
-        return (compareTree(a->left, b->left) && compareTree(a->right, b->right)); //so bool func, if one of them is not equal then output is false
-    }
-    else {
-        return 0;
-    }
-    
-}
-
-//to get pointers to the head of the subtrees for now we'll just take what's below head of current tree but technically this code should work anywhere in the tree not only for x2 which is children of head of tree
-BNode* finalSimplify (BNode* pntr) {
-
-    if (compareTree(pntr->left,pntr->right)) { //so if we have first initial equivalence we run for loop
-    
-        while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) { //so while loop should repeat as long as subtrees are identical and pntr left, right isnt nullptr as that point we're most simplified possible and cant simplify further
-            pntr = pntr->left; //if all these conditions occur then we have identical so pntr is pntr left and we repeat while loop condition
-        }
-        return pntr; 
-    }
-
-    //if (compareTree(pntr->left,pntr->right)) {
-    //    pntr = pntr->left;
-    //    return pntr; //pntr->left is going to be the new head of the tree
-        //then we must also repeat compareTree for remainder of this tree
-        //or should we continue comparison and take the parent node that is the closest to leaf as long as they're completely identical
-        //so taking x3 parent directly instead of getting x2 as head of tree and then comparing its children to get x3 as head.
-        //nvm repeating makes most sense so that compareTree just has to output either 1, 0
-    //    if ()
-    //}
-    else { //if we dont have equivalence we output tree as it is, so we only use the if statement so that we can have the else output the tree if we have no equivalence so we can differentiate between pntr outputted from while loop and pntr from else statement which was the original pntr.
-        return pntr;
-    }
-}
-
-//BNode* parserfinalSimplify (BNode* pntr) {
-
-//    else {
-//        parserfinalSimplify(pntr->left)
-//    }
-
-//}
 
 //so after repeatCheck we want to run through finalSimplify
 
@@ -200,8 +163,8 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 
     //this function gets the pointer to head of tree and sends it to the simplification function to check for common children
     BNode* currentpntr = checker(topN, fvalues);
-    currentpntr = repeatCheck(numofParam, currentpntr);
-    return finalSimplify(currentpntr); //outputs fully simplified tree
+    return repeatCheck(numofParam, currentpntr);
+    //return finalSimplify(currentpntr); //outputs fully simplified tree
 
     //for tree without final simplification by comparing subtrees uncomment:
     //return repeatCheck(numofParam,currentpntr);
@@ -227,23 +190,33 @@ int main() {
     vector<string>fvalues;
     string row;
 
-    row = "001";
+    row = "0001";
     fvalues.push_back(row);
-    row = "011";
+    row = "0010";
     fvalues.push_back(row);
-    row = "101";
+    row = "0101";
     fvalues.push_back(row);
-    row = "111";
+    row = "0110";
+    fvalues.push_back(row);
+    row = "0111";
+    fvalues.push_back(row);
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1101";
+    fvalues.push_back(row);
+    row = "1110";
+    fvalues.push_back(row);
+    row = "1111";
     fvalues.push_back(row);
   
     BNode* bt;
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->val)<<endl;
+    //cout<<(bt->right->val)<<endl;
 
-    cout << eval_bt(bt, "001") << endl; //should output 1
-    cout << eval_bt(bt, "110") << endl; //should output 0
+    //cout << eval_bt(bt, "001") << endl; //should output 1
+    //cout << eval_bt(bt, "110") << endl; //should output 0
     cout << "Number of nodes in tree is: " << counterN(bt);
     //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }
