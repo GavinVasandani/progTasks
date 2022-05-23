@@ -4,8 +4,10 @@
 #include <cstdlib>
 #include <vector>
 #include <fstream>
+#include <chrono> //REMOVE BEFORE TAKING ON REPLIT
 
 using namespace std;
+auto start = chrono::steady_clock::now();
     
 vector<string> arranger (vector<string>fvalues) {
 
@@ -134,5 +136,9 @@ int main() { //havent considered case where we have no identical subtrees in ent
     for(int i = 0; i<fvaluesNew.size(); i++) {
         cout<<fvaluesNew[i]<<endl;
     }
+
+    auto end = chrono::steady_clock::now();
+    auto diff = end - start;
+    cout<<chrono::duration<double, milli>(diff).count()<<" ms"<<endl;
 
 }

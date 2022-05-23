@@ -4,8 +4,10 @@
 #include <cstdlib>
 #include <vector>
 #include <fstream>
+#include <chrono> //REMOVE BEFORE TAKING ON REPLIT
 
 using namespace std;
+auto start = chrono::steady_clock::now(); //USED TO CHECK PROCESSING TIME. MAKE SURE TO REMOVE
 
 struct BNode{
     string val;    
@@ -315,14 +317,15 @@ int main() { //havent considered case where we have no identical subtrees in ent
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->left->val)<<endl;
+    cout<<(bt->right->right->val)<<endl;
 
     cout << eval_bt(bt, "0000") << endl; //should output 0
     cout << eval_bt(bt, "1111") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt)<<endl;
-    //vector<int>comTerm = commonTerm(fvalues);
-    //for (int i=0; i<comTerm.size(); i++) {
-    //    cout<<comTerm[i]<<endl;
-    //}
-    //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
+    
+    //USED TO CHECK PROCESSING TIME. MAKE SURE TO REMOVE
+    auto end = chrono::steady_clock::now();
+    auto diff = end - start;
+    cout<<chrono::duration<double, milli>(diff).count()<<" s"<<endl;
+
 }
