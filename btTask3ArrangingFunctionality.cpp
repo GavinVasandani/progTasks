@@ -29,11 +29,6 @@ vector<string> find_direction(string word){
 }
 
 void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
-    
-    
-    //we need to rearrange the input vector direction to be in the order we want for rearrangement. Then that will be followed by this func
-    //so keep this func the same.
-
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { //any combo of 0,1s we input must give 1 at the end because we only input combos that give 1, so base case is 1 is given to value of the leaf node (node which has nullptr next)
         pntr->val = "1";
@@ -50,38 +45,14 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
 
 BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
 
-  for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1 so fvalues.size() is number of inputs that give 1
+  for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
 
-    //must change vector direction for rearrangement
     vector<string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
-    
-    //we need to rearrange the input vector direction to be in the order we want for rearrangement. Then that will be followed by this func
-
     updateVal(t,direction,0);
     
     }
     return t; //outputs the pointer holding address of the top node of the tree
 }
-
-BNode* below (int numofParam, int count) { //this builds the full tree and by default assigns value = 0 for each node
-    BNode* b; //pointer b which holds address to a variable that is type BNode
-    b = new BNode; //pointer holds address to a temporary variable (new) BNode
-    if (count==numofParam) { //so loop ends once count = number of parameters
-    //so count and numofParam stays same even after rearranging
-    //the process of making all leaves initially = 0 is fine
-        b->val = "0";
-        b->left = nullptr;
-        b->right = nullptr;
-    }
-    else { //this names each node aka the val is assigned to a string being x(number)
-
-        string nodeVal = "x"+to_string(count+1); //this should be to_string(current index of fvalues input) not count+1
-        b->val = nodeVal;
-        b->left = below(numofParam,count+1);
-        b->right = below(numofParam,count+1);
-    }
-    return b; 
-} //this recursion makes the entire tree of n parameters
 
 string parser (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
     //outputs the value of the bottom node
@@ -102,7 +73,6 @@ string parser (BNode* pntr, vector<string>direction, int i) { //this checks whet
 } //this will make sure we parse all the way to the bottom and output the value
 
 //tree node counter
-
 int counterN(BNode* t) {
     if (t==nullptr) { //checks if pointer which holds address to a node is null. Leaf node has an address but child of leaf node doesn't exist so it will be null so 0 count for that
         return 0; 
@@ -112,6 +82,122 @@ int counterN(BNode* t) {
         return 1+counterN(t->left)+counterN(t->right); //so we go left node and we add 1 for that node and then we check the children of the left node, if doesnt exist then only 1+0+0 is outputted for this stack.
     }
 }
+
+//Arranger Code
+vector<int> commonTerm (vector<string>fvalues) { //part 1 of arrange functionality. Finds the number of common terms in each input parameter.
+
+   vector<int>numofComTerms; //vector that contains the number of common terms for its respective index so index 1 contains number of common terms in x1
+
+    //wrong we want to iterate element number and keep character position in element constant so: 
+    //so in below logic we iterate through each element in fvalues first and keep character position we evaluate constant
+    for (int k = 0; k<fvalues[1].size(); k++) { //fvalues.at(1).size() works
+        
+        //after every loop through fvalues elements we reset count1 and count0 values.
+        int count1 = 0;
+        int count0 = 0;
+
+        for (int j = 0; j<fvalues.size(); j++) {
+            
+            string word = "";
+            word.push_back(fvalues[j][k]);
+            //so word is used here to create a string with only 1 char input so we can easily compare string to string in if statement condition
+
+            if(word == "1") { //fvalues.at(j)[k] works. Use stoi() as contents of fvalues are strings to must convert to int for comparison with 1
+                count1 = count1+1;
+            }
+            else {
+                count0 = count0+1;
+            }
+        }
+        //when we exit it means we've seen all elements in fvalue at position k
+        if (count1>=count0) { //if count1=count0 then doesnt matter if we input count1 or count0 values into numofComTerms. 
+            numofComTerms.push_back(count1); //so we store the 1st value in numofComTerms, doesnt matter if most common term was 0s or 1s, we just evaluate which is the highest
+        }
+        else {
+            numofComTerms.push_back(count0);//else we store number of 0s
+        }
+        //so this will repeat for all terms in fvalues to give us vector with number of common terms for each parameter in its respective index.
+
+    }
+    //return numofComTerms; //we output the vector
+
+    //used to check outputs of the vectors
+    //for (int r = 0; r<numofComTerms.size(); r++) {
+    //    cout<<"This is value before ordering: "<<numofComTerms[r]<<endl;
+   // }
+
+    //Determining the parameter with most common terms and least: Rearranging vector to get parameter on top and bottom
+
+    vector<int>arrangeParam;
+    int temp0 = 0;
+    int temp1 = 0;
+
+    for(int i = 0; i<numofComTerms.size(); i++) {
+        arrangeParam.push_back(i);
+    }
+
+    for (int p = 0; p<numofComTerms.size(); p++) {
+
+        for(int q = p+1; q<numofComTerms.size(); q++) {
+
+            if(numofComTerms[p]>numofComTerms[q]) {
+
+                //ordering values in vector containing number of common terms
+                temp0 = numofComTerms[p];
+                numofComTerms[p] = numofComTerms[q];
+                numofComTerms[q] = temp0;
+
+                //ordering values in vector containing indexes aka parameters
+                temp1 = arrangeParam[p];
+                arrangeParam[p] = arrangeParam[q];
+                arrangeParam[q] = temp1;
+            } //we can call elements of vectors like vecname[index], so stop using .at()
+        }   //else no change in any vector
+    }
+    return arrangeParam;
+}
+
+BNode* below (int numofParam, int count, vector<string>fvalues) { //this builds the full tree and by default assigns value = 0 for each node
+    BNode* b; //pointer b which holds address to a variable that is type BNode
+    b = new BNode; //pointer holds address to a temporary variable (new) BNode
+    vector<int>arrangeParam = commonTerm(fvalues); //maybe change to rearrageParam so more clear
+
+    if (count==numofParam) { //so loop ends once count = number of parameters
+        b->val = "0";
+        b->left = nullptr;
+        b->right = nullptr;
+    }
+    else { //this names each node aka the val is assigned to a string being x(number)
+        //string nodeVal = "x"+to_string(count+1); //change this so that it takes parameter based on rearranged order
+        //maybe make vector so arrangeParam + 1; then to_string(arrangeParamNew[count+1]);
+        string nodeVal = "x"+to_string(arrangeParam[count]+1); //we add +1 again as arrangeParam is 0-3 so to get it from 1 onwards then must add 1 so now 1-4.
+        b->val = nodeVal;
+        b->left = below(numofParam,count+1,fvalues);
+        b->right = below(numofParam,count+1,fvalues);
+    }
+    return b; 
+} //this recursion makes the entire tree of n parameters
+//function order matters if we're calling a function in another function, so as we're calling commonTerm in func below then func below must be declared after commonTerm func
+
+//make new function and call arrange so we can use arrangeParam
+vector<string> rearrangeInputs (vector<string>fvalues) {
+    //rearrange fvalues to new order:
+    vector<string>fvaluesNew; //new vector that will contain all the rearranged fvalues
+    vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
+
+    for(int n = 0; n<fvalues.size(); n++) {
+        string elementNew = "0000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
+        
+        for(int m = 0; m<fvalues[0].size(); m++) {
+            elementNew[arrangeParam[m]] = fvalues[n][m];
+        }
+
+        fvaluesNew.push_back(elementNew); //so new rearranged word is inputted into fvaluesNew;
+    }
+
+    return fvaluesNew; //rearranged fvalues
+} //so we call this func in build_bt 
+
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
     //we havent considered case where we have 1 leaf node alone so parent has 2 children, 1 is leaf, 1 is another parent node and we still run program for leaf node even though it doesnt have any children so it shouldn't run as the if condition will not apply so we get segmentation fault.
@@ -178,12 +264,14 @@ BNode* finalSimplify (BNode* pntr) {
 
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
 
+    vector<string>fvaluesNew = rearrangeInputs(fvalues); //this is reordered fvalues aka fvaluesNew
+
     int numofParam = (fvalues.at(0)).size(); //number of parameters, so this checks the size of the first input combo of 0,1s
 
-    BNode* topN = below(numofParam,0); //creates initial tree with 0s in all leaf nodes and x(number) as val in the other branch nodes
+    BNode* topN = below(numofParam,0,fvalues); //creates initial tree with 0s in all leaf nodes and x(number) as val in the other branch nodes
 
     //this function gets the pointer to head of tree and sends it to the simplification function to check for common children
-    BNode* currentpntr = checker(topN, fvalues);
+    BNode* currentpntr = checker(topN, fvaluesNew);
     currentpntr = repeatCheck(numofParam, currentpntr);
     return finalSimplify(currentpntr); //outputs fully simplified tree
     
@@ -204,21 +292,21 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "0100";
-    fvalues.push_back(row);
     row = "0001";
+    fvalues.push_back(row);
+    row = "0010";
+    fvalues.push_back(row);
+    row = "0101";
     fvalues.push_back(row);
     row = "0110";
     fvalues.push_back(row);
-    row = "0011";
-    fvalues.push_back(row);
     row = "0111";
     fvalues.push_back(row);
-    row = "1001";
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1101";
     fvalues.push_back(row);
     row = "1110";
-    fvalues.push_back(row);
-    row = "1011";
     fvalues.push_back(row);
     row = "1111";
     fvalues.push_back(row);
@@ -227,10 +315,14 @@ int main() { //havent considered case where we have no identical subtrees in ent
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->right->right->val)<<endl;
+    cout<<(bt->right->left->val)<<endl;
 
     cout << eval_bt(bt, "0000") << endl; //should output 0
     cout << eval_bt(bt, "1111") << endl; //should output 1
-    cout << "Number of nodes in tree is: " << counterN(bt);
+    cout << "Number of nodes in tree is: " << counterN(bt)<<endl;
+    //vector<int>comTerm = commonTerm(fvalues);
+    //for (int i=0; i<comTerm.size(); i++) {
+    //    cout<<comTerm[i]<<endl;
+    //}
     //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }

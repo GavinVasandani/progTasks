@@ -71,6 +71,9 @@ int main() { //havent considered case where we have no identical subtrees in ent
     fvalues.push_back(row);
 
     vector<int>numofComTerms = arranger(fvalues);
+    for (int r = 0; r<numofComTerms.size(); r++) {
+        cout<<"This is value before ordering: "<<numofComTerms[r]<<endl;
+    }
 
     //Determining the parameter with most common terms and least: Rearranging vector to get parameter on top and bottom
     vector<int>arrangeParam;
@@ -98,8 +101,6 @@ int main() { //havent considered case where we have no identical subtrees in ent
                 arrangeParam[q] = temp1;
             } //we can call elements of vectors like vecname[index], so stop using .at()
         }   //else no change in any vector
-
-
     }
     //return {numofComTerms,arrangeParam}; //do this process in a func and then the output of the func wont be 2 vec
 

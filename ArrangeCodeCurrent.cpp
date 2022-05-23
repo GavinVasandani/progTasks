@@ -42,6 +42,9 @@ vector<string> arranger (vector<string>fvalues) {
         //so this will repeat for all terms in fvalues to give us vector with number of common terms for each parameter in its respective index.
 
     }
+    for (int r = 0; r<numofComTerms.size(); r++) {
+        cout<<"This is value before ordering: "<<numofComTerms[r]<<endl;
+    }
     //return numofComTerms; //we output the vector
 
     //Determining the parameter with most common terms and least: Rearranging vector to get parameter on top and bottom

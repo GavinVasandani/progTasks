@@ -1,1 +1,18 @@
-0000
+    row = "0001";
+    fvalues.push_back(row);
+    row = "0010";
+    fvalues.push_back(row);
+    row = "0101";
+    fvalues.push_back(row);
+    row = "0110";
+    fvalues.push_back(row);
+    row = "0111";
+    fvalues.push_back(row);
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1101";
+    fvalues.push_back(row);
+    row = "1110";
+    fvalues.push_back(row);
+    row = "1111";
+    fvalues.push_back(row);
