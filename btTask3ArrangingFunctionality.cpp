@@ -271,8 +271,7 @@ BNode* finalSimplify (BNode* pntr) {
     }
 }
 
-void printBT(const string& prefix, const BNode* node, bool isLeft)
-{
+void printBT(const string& prefix, const BNode* node, bool isLeft) {
     if( node != nullptr )
     {
         cout << prefix;
@@ -287,8 +286,7 @@ void printBT(const string& prefix, const BNode* node, bool isLeft)
         printBT( prefix + (isLeft ? "│   " : "    "), node->left, false);
     }
 }
-void printBT2(const BNode* node)
-{
+void printBT2(const BNode* node) {
     printBT("", node, false);    
 }
 
@@ -361,8 +359,8 @@ int main() { //havent considered case where we have no identical subtrees in ent
     cout<<"Please work"<<endl;
     cout<<(bt->val)<<endl;
 
-    cout << eval_bt(bt, "0") << endl; //should output 0
-    cout << eval_bt(bt, "1") << endl; //should output 1
+    cout << eval_bt(bt, "10000") << endl; //should output 0
+    cout << eval_bt(bt, "11111") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt)<<endl;
 
     printBT2(bt); //outputs tree

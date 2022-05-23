@@ -204,37 +204,7 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "00000";
-    fvalues.push_back(row);
-    row = "00001";
-    fvalues.push_back(row);
-    row = "00010";
-    fvalues.push_back(row);
-    row = "00011";
-    fvalues.push_back(row);
-    row = "00100";
-    fvalues.push_back(row);
-    row = "00101";
-    fvalues.push_back(row);
-    row = "00110";
-    fvalues.push_back(row);
-    row = "00111";
-    fvalues.push_back(row);
-    row = "01000";
-    fvalues.push_back(row);
-    row = "01001";
-    fvalues.push_back(row);
-    row = "01010";
-    fvalues.push_back(row);
-    row = "01011";
-    fvalues.push_back(row);
-    row = "01100";
-    fvalues.push_back(row);
-    row = "01101";
-    fvalues.push_back(row);
-    row = "01110";
-    fvalues.push_back(row);
-    row = "01111";
+    row = "11";
     fvalues.push_back(row);
   
     BNode* bt;
