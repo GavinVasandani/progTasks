@@ -92,7 +92,7 @@ vector<int> commonTerm (vector<string>fvalues) { //part 1 of arrange functionali
 
     //wrong we want to iterate element number and keep character position in element constant so: 
     //so in below logic we iterate through each element in fvalues first and keep character position we evaluate constant
-    for (int k = 0; k<fvalues[1].size(); k++) { //fvalues.at(1).size() works
+    for (int k = 0; k<fvalues[0].size(); k++) { //fvalues.at(1).size() works
         
         //after every loop through fvalues elements we reset count1 and count0 values.
         int count1 = 0;
@@ -188,8 +188,10 @@ vector<string> rearrangeInputs (vector<string>fvalues) {
     vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
 
     for(int n = 0; n<fvalues.size(); n++) {
-        string elementNew = "0000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
-        
+        string elementNew = "";
+        for (int t = 0; t<fvalues[0].size(); t++) {
+            elementNew.push_back(0); //so this makes sure the string that will hold values and will change based on new arranged order is same size as inputs
+        }
         for(int m = 0; m<fvalues[0].size(); m++) {
             elementNew[arrangeParam[m]] = fvalues[n][m];
         }
@@ -294,33 +296,17 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "0001";
-    fvalues.push_back(row);
-    row = "0010";
-    fvalues.push_back(row);
-    row = "0101";
-    fvalues.push_back(row);
-    row = "0110";
-    fvalues.push_back(row);
-    row = "0111";
-    fvalues.push_back(row);
-    row = "1010";
-    fvalues.push_back(row);
-    row = "1101";
-    fvalues.push_back(row);
-    row = "1110";
-    fvalues.push_back(row);
-    row = "1111";
+    row = "11";
     fvalues.push_back(row);
   
     BNode* bt;
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->right->val)<<endl;
+    cout<<(bt->val)<<endl;
 
-    cout << eval_bt(bt, "0000") << endl; //should output 0
-    cout << eval_bt(bt, "1111") << endl; //should output 1
+    cout << eval_bt(bt, "01") << endl; //should output 0
+    cout << eval_bt(bt, "11") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt)<<endl;
     
     //USED TO CHECK PROCESSING TIME. MAKE SURE TO REMOVE

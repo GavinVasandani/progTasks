@@ -204,33 +204,17 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "0100";
-    fvalues.push_back(row);
-    row = "0001";
-    fvalues.push_back(row);
-    row = "0110";
-    fvalues.push_back(row);
-    row = "0011";
-    fvalues.push_back(row);
-    row = "0111";
-    fvalues.push_back(row);
-    row = "1001";
-    fvalues.push_back(row);
-    row = "1110";
-    fvalues.push_back(row);
-    row = "1011";
-    fvalues.push_back(row);
-    row = "1111";
+    row = "11";
     fvalues.push_back(row);
   
     BNode* bt;
     bt = build_bt(fvalues);
 
     cout<<"Please work"<<endl;
-    cout<<(bt->right->right->right->val)<<endl;
+    cout<<(bt->val)<<endl;
 
-    cout << eval_bt(bt, "0000") << endl; //should output 0
-    cout << eval_bt(bt, "1111") << endl; //should output 1
+    //cout << eval_bt(bt, "001") << endl; //should output 0
+    //cout << eval_bt(bt, "110") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt);
     //current works for all tests but we need the compare tree function to work not only for children of head of tree but for anywhere in the tree
 }
