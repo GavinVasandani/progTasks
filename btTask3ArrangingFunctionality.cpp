@@ -188,19 +188,24 @@ vector<string> rearrangeInputs (vector<string>fvalues) {
     vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
 
     for(int n = 0; n<fvalues.size(); n++) {
+
         string elementNew = "";
-        for (int t = 0; t<fvalues[0].size(); t++) {
-            elementNew.push_back(0); //so this makes sure the string that will hold values and will change based on new arranged order is same size as inputs
-        }
+        //for (int t = 0; t<fvalues[0].size(); t++) {
+        //    elementNew.push_back(0); //so this makes sure the string that will hold values and will change based on new arranged order is same size as inputs
+        //}
+        //string elementNew = "00000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
+        
         for(int m = 0; m<fvalues[0].size(); m++) {
-            elementNew[arrangeParam[m]] = fvalues[n][m];
+            //elementNew[arrangeParam[m]] = fvalues[n][m];
+            //elementNew[m] = fvalues[n][arrangeParam[m]];
+            elementNew.push_back(fvalues[n][arrangeParam[m]]);
         }
 
         fvaluesNew.push_back(elementNew); //so new rearranged word is inputted into fvaluesNew;
     }
-
     return fvaluesNew; //rearranged fvalues
-} //so we call this func in build_bt 
+
+}
 
 BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
@@ -266,6 +271,27 @@ BNode* finalSimplify (BNode* pntr) {
     }
 }
 
+void printBT(const string& prefix, const BNode* node, bool isLeft)
+{
+    if( node != nullptr )
+    {
+        cout << prefix;
+
+        cout << (isLeft ? "├──" : "└──" );
+
+        // print the value of the node
+        cout << node->val << endl;
+
+        // enter the next tree level - left and right branch
+        printBT( prefix + (isLeft ? "│   " : "    "), node->right, true);
+        printBT( prefix + (isLeft ? "│   " : "    "), node->left, false);
+    }
+}
+void printBT2(const BNode* node)
+{
+    printBT("", node, false);    
+}
+
 BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
 
     vector<string>fvaluesNew = rearrangeInputs(fvalues); //this is reordered fvalues aka fvaluesNew
@@ -296,7 +322,37 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "11";
+    row = "00000";
+    fvalues.push_back(row);
+    row = "00001";
+    fvalues.push_back(row);
+    row = "00010";
+    fvalues.push_back(row);
+    row = "00011";
+    fvalues.push_back(row);
+    row = "00100";
+    fvalues.push_back(row);
+    row = "00101";
+    fvalues.push_back(row);
+    row = "00110";
+    fvalues.push_back(row);
+    row = "00111";
+    fvalues.push_back(row);
+    row = "01000";
+    fvalues.push_back(row);
+    row = "01001";
+    fvalues.push_back(row);
+    row = "01010";
+    fvalues.push_back(row);
+    row = "01011";
+    fvalues.push_back(row);
+    row = "01100";
+    fvalues.push_back(row);
+    row = "01101";
+    fvalues.push_back(row);
+    row = "01110";
+    fvalues.push_back(row);
+    row = "01111";
     fvalues.push_back(row);
   
     BNode* bt;
@@ -305,9 +361,11 @@ int main() { //havent considered case where we have no identical subtrees in ent
     cout<<"Please work"<<endl;
     cout<<(bt->val)<<endl;
 
-    cout << eval_bt(bt, "01") << endl; //should output 0
-    cout << eval_bt(bt, "11") << endl; //should output 1
+    cout << eval_bt(bt, "0") << endl; //should output 0
+    cout << eval_bt(bt, "1") << endl; //should output 1
     cout << "Number of nodes in tree is: " << counterN(bt)<<endl;
+
+    printBT2(bt); //outputs tree
     
     //USED TO CHECK PROCESSING TIME. MAKE SURE TO REMOVE
     auto end = chrono::steady_clock::now();

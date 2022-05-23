@@ -98,13 +98,15 @@ vector<string> arranger (vector<string>fvalues) {
     for(int n = 0; n<fvalues.size(); n++) {
 
         string elementNew = "";
-        for (int t = 0; t<fvalues[0].size(); t++) {
-            elementNew.push_back(0); //so this makes sure the string that will hold values and will change based on new arranged order is same size as inputs
-        }
-        //string elementNew = "0000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
+        //for (int t = 0; t<fvalues[0].size(); t++) {
+        //    elementNew.push_back(0); //so this makes sure the string that will hold values and will change based on new arranged order is same size as inputs
+        //}
+        //string elementNew = "00000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
         
         for(int m = 0; m<fvalues[0].size(); m++) {
-            elementNew[arrangeParam[m]] = fvalues[n][m];
+            //elementNew[arrangeParam[m]] = fvalues[n][m];
+            //elementNew[m] = fvalues[n][arrangeParam[m]];
+            elementNew.push_back(fvalues[n][arrangeParam[m]]);
         }
 
         fvaluesNew.push_back(elementNew); //so new rearranged word is inputted into fvaluesNew;
@@ -119,7 +121,37 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "11";
+    row = "00000";
+    fvalues.push_back(row);
+    row = "00001";
+    fvalues.push_back(row);
+    row = "00010";
+    fvalues.push_back(row);
+    row = "00011";
+    fvalues.push_back(row);
+    row = "00100";
+    fvalues.push_back(row);
+    row = "00101";
+    fvalues.push_back(row);
+    row = "00110";
+    fvalues.push_back(row);
+    row = "00111";
+    fvalues.push_back(row);
+    row = "01000";
+    fvalues.push_back(row);
+    row = "01001";
+    fvalues.push_back(row);
+    row = "01010";
+    fvalues.push_back(row);
+    row = "01011";
+    fvalues.push_back(row);
+    row = "01100";
+    fvalues.push_back(row);
+    row = "01101";
+    fvalues.push_back(row);
+    row = "01110";
+    fvalues.push_back(row);
+    row = "01111";
     fvalues.push_back(row);
 
     vector<string>fvaluesNew = arranger(fvalues);
