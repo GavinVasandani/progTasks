@@ -32,13 +32,15 @@ int main() { //havent considered case where we have no identical subtrees in ent
     row = "1111";
     fvalues.push_back(row);
 
-    cout<<(fvalues.at(5))[0]<<endl;
+    cout<<fvalues[5][0]<<endl;
     string word = "";
-    word.push_back(fvalues.at(5)[0]);
+    word.push_back(fvalues[5][0]);
 
     if(word == "1"){
         cout<<"it works!";
     }
+
+    cout<<fvalues[1]<<endl;
 
 
     

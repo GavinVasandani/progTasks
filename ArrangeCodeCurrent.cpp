@@ -7,7 +7,7 @@
 
 using namespace std;
     
-vector<int> arranger (vector<string>fvalues) {
+vector<string> arranger (vector<string>fvalues) {
 
     vector<int>numofComTerms; //vector that contains the number of common terms for its respective index so index 1 contains number of common terms in x1
 
@@ -42,37 +42,10 @@ vector<int> arranger (vector<string>fvalues) {
         //so this will repeat for all terms in fvalues to give us vector with number of common terms for each parameter in its respective index.
 
     }
-    return numofComTerms; //we output the vector
-
-}
-    
-int main() { //havent considered case where we have no identical subtrees in entire tree
-
-    vector<string>fvalues;
-    string row;
-
-    row = "0001";
-    fvalues.push_back(row);
-    row = "0010";
-    fvalues.push_back(row);
-    row = "0101";
-    fvalues.push_back(row);
-    row = "0110";
-    fvalues.push_back(row);
-    row = "0111";
-    fvalues.push_back(row);
-    row = "1010";
-    fvalues.push_back(row);
-    row = "1101";
-    fvalues.push_back(row);
-    row = "1110";
-    fvalues.push_back(row);
-    row = "1111";
-    fvalues.push_back(row);
-
-    vector<int>numofComTerms = arranger(fvalues);
+    //return numofComTerms; //we output the vector
 
     //Determining the parameter with most common terms and least: Rearranging vector to get parameter on top and bottom
+
     vector<int>arrangeParam;
     int temp0 = 0;
     int temp1 = 0;
@@ -104,10 +77,59 @@ int main() { //havent considered case where we have no identical subtrees in ent
     //return {numofComTerms,arrangeParam}; //do this process in a func and then the output of the func wont be 2 vec
 
     //vector<int>comTerm = arranger(fvalues);
-    for (int k=0; k<numofComTerms.size(); k++) {
-        cout<<numofComTerms[k]<<endl;
+    //for (int k=0; k<numofComTerms.size(); k++) {
+    //    cout<<numofComTerms[k]<<endl;
+    //}
+    //for (int j=0; j<arrangeParam.size(); j++) {
+    //    cout<<arrangeParam[j]<<endl;
+    //}
+
+    //rearrange fvalues to new order:
+
+    vector<string>fvaluesNew; //new vector that will contain all the rearranged fvalues
+
+    for(int n = 0; n<fvalues.size(); n++) {
+        string elementNew = "0000"; //string that will hold values that we will change based on new rearranged order and then input into fvaluesNew
+        
+        for(int m = 0; m<fvalues[0].size(); m++) {
+            elementNew[arrangeParam[m]] = fvalues[n][m];
+        }
+
+        fvaluesNew.push_back(elementNew); //so new rearranged word is inputted into fvaluesNew;
     }
-    for (int j=0; j<arrangeParam.size(); j++) {
-        cout<<arrangeParam[j]<<endl;
+
+    return fvaluesNew; //rearranged fvalues
+
+}
+    
+int main() { //havent considered case where we have no identical subtrees in entire tree
+
+    vector<string>fvalues;
+    string row;
+
+    row = "0001";
+    fvalues.push_back(row);
+    row = "0010";
+    fvalues.push_back(row);
+    row = "0101";
+    fvalues.push_back(row);
+    row = "0110";
+    fvalues.push_back(row);
+    row = "0111";
+    fvalues.push_back(row);
+    row = "1010";
+    fvalues.push_back(row);
+    row = "1101";
+    fvalues.push_back(row);
+    row = "1110";
+    fvalues.push_back(row);
+    row = "1111";
+    fvalues.push_back(row);
+
+    vector<string>fvaluesNew = arranger(fvalues);
+
+    for(int i = 0; i<fvaluesNew.size(); i++) {
+        cout<<fvaluesNew[i]<<endl;
     }
+
 }
