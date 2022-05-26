@@ -36,7 +36,7 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
         pntr->val = "1";
         //return pntr;
     }
-    else if (direction.at(i)=="0") { //direction.at(i) gives the value at index i in the vector direction
+    else if (direction[i]=="0") { //direction.at(i) gives the value at index i in the vector direction
         updateVal(pntr->left,direction,i+1);
     }
     else {
@@ -49,7 +49,7 @@ BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see w
 
   for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
 
-    vector<string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
+    vector<string>direction = find_direction(fvalues[i]); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
     updateVal(t,direction,0);
     
     }
@@ -59,11 +59,11 @@ BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see w
 string parser (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
     //outputs the value of the bottom node
 
-    if((pntr->right == nullptr) && (pntr->left == nullptr)) { //should both be nullptr or is 1 enough?
+    if((pntr->left == nullptr) && (pntr->right == nullptr)) { //should both be nullptr or is 1 enough?
         return pntr->val; //so this means we're in leaf node, so pntr is pointing to a leaf node
        // if ((pntr->val //no we need to start at node right before leafs
     }
-    else if (direction.at(i)=="0") { //if vector that contains this specific input has a 0 then we go left, if not then else go right and recur function
+    else if (direction[i]=="0") { //if vector that contains this specific input has a 0 then we go left, if not then else go right and recur function
         return parser(pntr->left,direction,i+1);
     }
     else {
@@ -76,7 +76,7 @@ string parser (BNode* pntr, vector<string>direction, int i) { //this checks whet
 
 //tree node counter
 int counterN(BNode* t) {
-    if (t==nullptr) { //checks if pointer which holds address to a node is null. Leaf node has an address but child of leaf node doesn't exist so it will be null so 0 count for that
+    if (t==NULL) { //checks if pointer which holds address to a node is null. Leaf node has an address but child of leaf node doesn't exist so it will be null so 0 count for that
         return 0; 
     }
 
@@ -237,7 +237,7 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
 }
 BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
 
-    for (int i = 0; i<numofParam-1; i++) { //so if we have 3 input then this will loop twice, also string word argument is given by number of param in build_bt func
+    for (int i = 0; i<numofParam; i++) { //so if we have 3 input then this will loop twice, also string word argument is given by number of param in build_bt func
         currentpntr = parserChecker(currentpntr); //so we sent in the pointer to the head of the tree, we simplify one time and then resend in the simplified tree back into to further simplify if possible. 
     }
     return currentpntr; //this is the address of the head of the simplified tree
@@ -294,7 +294,7 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 
     vector<string>fvaluesNew = rearrangeInputs(fvalues); //this is reordered fvalues aka fvaluesNew
 
-    int numofParam = (fvalues.at(0)).size(); //number of parameters, so this checks the size of the first input combo of 0,1s
+    int numofParam = (fvalues[0]).size(); //number of parameters, so this checks the size of the first input combo of 0,1s
 
     BNode* topN = below(numofParam,0,fvalues); //creates initial tree with 0s in all leaf nodes and x(number) as val in the other branch nodes
 
@@ -320,37 +320,13 @@ int main() { //havent considered case where we have no identical subtrees in ent
     vector<string>fvalues;
     string row;
 
-    row = "00000";
+    row = "1001";
     fvalues.push_back(row);
-    row = "00001";
+    row = "1011";
     fvalues.push_back(row);
-    row = "00010";
+    row = "1101";
     fvalues.push_back(row);
-    row = "00011";
-    fvalues.push_back(row);
-    row = "00100";
-    fvalues.push_back(row);
-    row = "00101";
-    fvalues.push_back(row);
-    row = "00110";
-    fvalues.push_back(row);
-    row = "00111";
-    fvalues.push_back(row);
-    row = "01000";
-    fvalues.push_back(row);
-    row = "01001";
-    fvalues.push_back(row);
-    row = "01010";
-    fvalues.push_back(row);
-    row = "01011";
-    fvalues.push_back(row);
-    row = "01100";
-    fvalues.push_back(row);
-    row = "01101";
-    fvalues.push_back(row);
-    row = "01110";
-    fvalues.push_back(row);
-    row = "01111";
+    row = "1111";
     fvalues.push_back(row);
   
     BNode* bt;

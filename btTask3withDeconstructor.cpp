@@ -35,7 +35,7 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
         pntr->val = "1";
         //return pntr;
     }
-    else if (direction.at(i)=="0") { //direction.at(i) gives the value at index i in the vector direction
+    else if (direction[i]=="0") { //direction.at(i) gives the value at index i in the vector direction
         updateVal(pntr->left,direction,i+1);
     }
     else {
@@ -231,11 +231,14 @@ BNode* finalSimplify (BNode* pntr) {
 
     if (compareTree(pntr->left,pntr->right)) { 
     
-        while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) { 
+        while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) { //we need nullptr condition in while loop as we cant check for null outside while loop
             pntr = pntr->left; 
         }
         return pntr; //pntr->left is going to be the new head of the tree
     }
+    //else if (pntr->left==nullptr && pntr->right==nullptr) {
+    //    return pntr;
+    //}
     else { 
         pntr->left = finalSimplify(pntr->left);
         pntr->right = finalSimplify(pntr->right);
@@ -270,7 +273,7 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 
     BNode* topN = below(numofParam,0,fvalues); 
     BNode* currentpntr = checker(topN, fvaluesNew); //USES find_direction
-    return currentpntr = repeatCheck(numofParam, currentpntr); 
+    currentpntr = repeatCheck(numofParam, currentpntr); 
     return finalSimplify(currentpntr); //outputs fully simplified tree
     
 }
@@ -353,13 +356,13 @@ int main(){
  
     fv.clear();
  
-    row = "00";
+    row = "1001";
     fv.push_back(row);
-    row = "01";
+    row = "1011";
     fv.push_back(row);
-    row = "10";
+    row = "1101";
     fv.push_back(row);
-    row = "11";
+    row = "1111";
     fv.push_back(row);
  
     BoolTree ft2(fv);
@@ -379,10 +382,10 @@ int main(){
     cout << ft1.eval("11") << endl;
     // this should print "1"
  
-    cout << ft2.eval("000") << endl;
+    cout << ft2.eval("1101") << endl;
     // this should print "0"
  
-    cout << ft2.eval("111") << endl;
+    cout << ft2.eval("0000") << endl;
     // this should print "1"
  
 }
