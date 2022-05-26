@@ -209,7 +209,7 @@ BNode* parserChecker (BNode* pntr) {
 
 BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
 
-    for (int i = 0; i<numofParam-1; i++) { 
+    for (int i = 0; i<numofParam; i++) { 
         currentpntr = parserChecker(currentpntr); 
     }
     return currentpntr; //this is the address of the head of the simplified tree
@@ -270,7 +270,7 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 
     BNode* topN = below(numofParam,0,fvalues); 
     BNode* currentpntr = checker(topN, fvaluesNew); //USES find_direction
-    currentpntr = repeatCheck(numofParam, currentpntr); 
+    return currentpntr = repeatCheck(numofParam, currentpntr); 
     return finalSimplify(currentpntr); //outputs fully simplified tree
     
 }
@@ -353,13 +353,13 @@ int main(){
  
     fv.clear();
  
-    row = "010";
+    row = "00";
     fv.push_back(row);
-    row = "101";
+    row = "01";
     fv.push_back(row);
-    row = "110";
+    row = "10";
     fv.push_back(row);
-    row = "111";
+    row = "11";
     fv.push_back(row);
  
     BoolTree ft2(fv);
