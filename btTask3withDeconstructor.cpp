@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream> //FINAL
 #include <string>
 #include <cmath>
 #include <cstdlib>
@@ -346,46 +346,47 @@ int main(){
     vector<string> fv;
     string row;
  
-    row = "11";
-    fv.push_back(row);
+    //row = "11";
+    //fv.push_back(row);
  
-    BoolTree ft1(fv);
+    //BoolTree ft1(fv);
     // as in the second assignment we give as input only the rows
     // of the truth table whose value is 1
     // (this is an example with the boolean "and" function)
  
-    fv.clear();
+    //fv.clear();
  
-    row = "1001";
+    row = "001";
     fv.push_back(row);
-    row = "1011";
+    row = "011";
     fv.push_back(row);
-    row = "1101";
+    row = "110";
     fv.push_back(row);
-    row = "1111";
+    row = "111";
     fv.push_back(row);
- 
+
     BoolTree ft2(fv);
     // this corresponds to the f(x1, x2, x3) example shown above
  
-    cout << ft1.n_nodes() << endl;
+    //cout << ft1.n_nodes() << endl;
     // we expect this to print 5
  
-    cout << ft2.n_nodes() << endl;
+    cout << "Number of nodes in tree: "<< ft2.n_nodes() << endl;
     // if the algorithm is such that it builds the smallest possible corresponding tree
     // for the boolean function we are considering
     // then this will print 3 (see tree diagram in the example above)
  
-    cout << ft1.eval("01") << endl;
+    //cout << ft1.eval("01") << endl;
     // this should print "0" 
  
-    cout << ft1.eval("11") << endl;
+    //cout << ft1.eval("11") << endl;
     // this should print "1"
  
-    cout << ft2.eval("1101") << endl;
+    cout << ft2.eval("110") << endl;
+    // this should print "1"
+ 
+    cout << ft2.eval("010") << endl;
     // this should print "0"
  
-    cout << ft2.eval("0000") << endl;
-    // this should print "1"
- 
 }
+
