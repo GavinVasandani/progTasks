@@ -223,25 +223,6 @@ BNode* identicalTree (BNode* pntr) {
 }
 //Identical Tree Algorithm End
 
-void printBT(const std::string& prefix, const BNode* node, bool isLeft) {
-    if( node != nullptr )
-    {
-        std::cout << prefix;
-
-        std::cout << (isLeft ? "├──" : "└──" );
-
-        // print the value of the node
-        std::cout << node->val << std::endl;
-
-        // enter the next tree level - left and right branch
-        printBT( prefix + (isLeft ? "│   " : "    "), node->right, true);
-        printBT( prefix + (isLeft ? "│   " : "    "), node->left, false);
-    }
-}
-void printBT2(const BNode* node) {
-    printBT("", node, false);    
-}
-
 BNode* build_bt(const std::vector<std::string>& fvalues) {
 
     int NumOfVar = (fvalues[0]).size();
@@ -309,7 +290,6 @@ public:
  
     BoolTree(const std::vector<std::string>& fvalues){
        t = build_bt(fvalues);
-       printBT2(t); //REMOVE 
     }
  
     std::string eval(const std::string& s){
