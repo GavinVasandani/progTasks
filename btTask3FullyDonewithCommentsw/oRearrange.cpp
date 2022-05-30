@@ -42,8 +42,8 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
     } //this will make sure we assign the correct leaf node the correct answer value
 
 }
-
-BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
+//as it assigns the leaf node to whether its 1 or 0 based on input
+BNode* assignLeaf (BNode* t, vector<string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
 
   for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
 
@@ -53,8 +53,8 @@ BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see w
     }
     return t; //outputs the pointer holding address of the top node of the tree
 }
-
-BNode* below (int numofParam, int count) { //this builds the full tree and by default assigns value = 0 for each node
+//builds tree with all nodes set to 0
+BNode* construct (int numofParam, int count) { //this builds the full tree and by default assigns value = 0 for each node
     BNode* b; //pointer b which holds address to a variable that is type BNode
     b = new BNode; //pointer holds address to a temporary variable (new) BNode
     if (count==numofParam) { //so loop ends once count = number of parameters
@@ -71,7 +71,7 @@ BNode* below (int numofParam, int count) { //this builds the full tree and by de
     return b; 
 } //this recursion makes the entire tree of n parameters
 
-string parser (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
+string checker (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
     //outputs the value of the bottom node
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { //should both be nullptr or is 1 enough?
@@ -102,8 +102,8 @@ int counterN(BNode* t) {
 }
 
 //checks if children are common and if so replaces the parent with child
-
-BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
+//as it compares if leafs are common and replaces, then this is identicalLeaf func
+BNode* compareLeaf (BNode* pntr) { //as long as pntr is head of tree, the modifications to pntr should be displayed in pntr by itself so we can keep as void func
 
     if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
         if((pntr->left->val) == (pntr->right->val)) {
@@ -123,8 +123,8 @@ BNode* parserChecker (BNode* pntr) { //as long as pntr is head of tree, the modi
 }
 
 //function to repeat parserChecker x-1 times where x is number of parameters
-
-BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
+//repeatIdenticalLeaf
+BNode* identicalLeaf (int numofParam, BNode* currentpntr) { 
 
     for (int i = 0; i<numofParam-1; i++) { //so if we have 3 input then this will loop twice, also string word argument is given by number of param in build_bt func
         currentpntr = parserChecker(currentpntr); //so we sent in the pointer to the head of the tree, we simplify one time and then resend in the simplified tree back into to further simplify if possible. 
