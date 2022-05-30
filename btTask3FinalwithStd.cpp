@@ -1,12 +1,6 @@
 #include <iostream> //FINAL
 #include <string>
-#include <cmath>
-#include <cstdlib>
 #include <vector>
-#include <fstream>
-#include <chrono> //REMOVE BEFORE TAKING ON REPLIT
-
-//using namespace std; //REMOVE
 
 struct BNode{
 
@@ -15,13 +9,13 @@ struct BNode{
     BNode* right;
 
 };
+//Function to split input into separate strings
+std::vector<std::string> findDirection(std::string word){
 
-std::vector<std::string> find_direction(std::string word){
- //this needs to loop for every letter in the element
     std::string word_i;
-    std::vector<std::string>direction; //list containing what direction to go in (1 = R, 0 = L)
+    std::vector<std::string>direction;
  
-    for(int i = 0; i < word.size(); i++){ //word.size() tells us the number of parameters 
+    for(int i = 0; i < word.size(); i++){
  
         word_i = "";
         word_i.push_back(word[i]);
@@ -30,69 +24,50 @@ std::vector<std::string> find_direction(std::string word){
     }
     return direction;
 }
-
-void updateVal (BNode* pntr, std::vector<std::string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
+//Function to reassign leaf value based on input combination
+void updateVal (BNode* pntr, std::vector<std::string>direction, int i) {
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { 
         pntr->val = "1";
-        //return pntr;
     }
-    else if (direction[i]=="0") { //direction.at(i) gives the value at index i in the vector direction
+    else if (direction[i]=="0") {
         updateVal(pntr->left,direction,i+1);
     }
     else {
         updateVal(pntr->right,direction,i+1);
-    } //this will make sure we assign the correct leaf node the correct answer value
+    }
 
 }
+//Function used to connect the 2 functions: findDirection and UpdateVal
+BNode* assignLeaf (BNode* t, std::vector<std::string> fvalues) {
 
-BNode* checker (BNode* t, std::vector<std::string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
-
-  for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
-
-    std::vector<std::string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
-    updateVal(t,direction,0);
-    
+    for (int i = 0; i<fvalues.size(); i++) {
+        std::vector<std::string>direction = findDirection(fvalues[i]);
+        updateVal(t,direction,0);
     }
-    return t; //outputs the pointer holding address of the top node of the tree
+    return t;
 }
+//Function takes in input and traverses through tree to check if output is 0 or 1
+std::string checker (BNode* pntr, std::vector<std::string>direction, int i) {
 
-std::string parser (BNode* pntr, std::vector<std::string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
-    //outputs the value of the bottom node
-
-    if((pntr->left == nullptr) && (pntr->right == nullptr)) { //should both be nullptr or is 1 enough?
-        return pntr->val; //so this means we're in leaf node, so pntr is pointing to a leaf node
-       // if ((pntr->val //no we need to start at node right before leafs
+    if((pntr->left == nullptr) && (pntr->right == nullptr)) {
+        return pntr->val;
     }
-    else if (direction.at(i)=="0") { //if vector that contains this specific input has a 0 then we go left, if not then else go right and recur function
-        return parser(pntr->left,direction,i+1);
+    else if (direction[i]=="0") {
+        return checker(pntr->left,direction,i+1);
     }
     else {
-        return parser(pntr->right,direction,i+1); 
-        //we only want to do this for the leaves not every node
-      //  if ((pntr->right->val) == (pntr->left->val)) { 
-
-        }
-} //this will make sure we parse all the way to the bottom and output the value
-
-//given function. tree node counter
-int n_nodes_bt(BNode* t){
-    if(t == NULL){
-        return 0;
+        return checker(pntr->right,direction,i+1); 
     }
-    else{
-        return 1 + n_nodes_bt(t->left) + n_nodes_bt(t->right);
-    }
-}
 
-//Arranger Code. Rename this func name to something that better represents what it does
-std::vector<int> commonTerm (std::vector<std::string>fvalues) {
+} 
+//Rearranging Algorithm Start
+std::vector<int> rearrangeOrder (int NumOfVar, std::vector<std::string>fvalues) {
 
-   std::vector<int>numofComTerms;
+   std::vector<int>CommonTerms;
 
-    for (int k = 0; k<fvalues[0].size(); k++) { //fvalues.at(1).size() works
+    for (int k = 0; k<NumOfVar; k++) {
         
-        //after every loop through fvalues elements we reset count1 and count0 values.
         int count1 = 0;
         int count0 = 0;
 
@@ -101,152 +76,152 @@ std::vector<int> commonTerm (std::vector<std::string>fvalues) {
             std::string word = "";
             word.push_back(fvalues[j][k]);
 
-            if(word == "1") { //fvalues.at(j)[k] works. Use stoi() as contents of fvalues are strings to must convert to int for comparison with 1
+            if(word == "1") {
                 count1 = count1+1;
             }
             else {
                 count0 = count0+1;
             }
         }
-        //when we exit it means we've seen all elements in fvalue at position k
-        if (count1>=count0) { //if count1=count0 then doesnt matter if we input count1 or count0 values into numofComTerms. 
-            numofComTerms.push_back(count1); 
+
+        if (count1>=count0) {
+            CommonTerms.push_back(count1); 
         }
         else {
-            numofComTerms.push_back(count0);//else we store number of 0s
+            CommonTerms.push_back(count0);
         }
 
     }
 
-    std::vector<int>arrangeParam;
+    std::vector<int>varOrder;
     int temp0 = 0;
     int temp1 = 0;
 
-    for(int i = 0; i<numofComTerms.size(); i++) {
-        arrangeParam.push_back(i);
+    for(int i = 0; i<NumOfVar; i++) {
+        varOrder.push_back(i);
     }
 
-    for (int p = 0; p<numofComTerms.size(); p++) {
+    for (int p = 0; p<NumOfVar; p++) {
 
-        for(int q = p+1; q<numofComTerms.size(); q++) {
+        for(int q = p+1; q<NumOfVar; q++) {
 
-            if(numofComTerms[p]>numofComTerms[q]) {
+            if(CommonTerms[p]>CommonTerms[q]) {
 
-                //ordering values in vector containing number of common terms
-                temp0 = numofComTerms[p];
-                numofComTerms[p] = numofComTerms[q];
-                numofComTerms[q] = temp0;
+                temp0 = CommonTerms[p];
+                CommonTerms[p] = CommonTerms[q];
+                CommonTerms[q] = temp0;
 
-                //ordering values in vector containing indexes aka parameters
-                temp1 = arrangeParam[p];
-                arrangeParam[p] = arrangeParam[q];
-                arrangeParam[q] = temp1;
-            } //we can call elements of vectors like vecname[index], so stop using .at()
-        }   //else no change in any vector
+                temp1 = varOrder[p];
+                varOrder[p] = varOrder[q];
+                varOrder[q] = temp1;
+            }
+        }
     }
-    return arrangeParam;
+    return varOrder;
 }
 
-BNode* below (int numofParam, int count, std::vector<std::string>fvalues) { //maybe rename to children so func name is children not below //this builds the full tree and by default assigns value = 0 for each node
-    BNode* b; //pointer b which holds address to a variable that is type BNode
-    b = new BNode; //pointer holds address to a temporary variable (new) BNode
-    std::vector<int>arrangeParam = commonTerm(fvalues); //maybe change to rearrageParam so more clear
+std::vector<std::string> rearrangeInputs (int NumOfVar, std::vector<std::string>fvalues) {
 
-    if (count==numofParam) { //so loop ends once count = number of parameters
-        b->val = "0";
-        b->left = nullptr;
-        b->right = nullptr;
-    }
-    else { 
-        std::string nodeVal = "x"+std::to_string(arrangeParam[count]+1); //we add +1 again as arrangeParam is 0-3 so to get it from 1 onwards then must add 1 so now 1-4.
-        b->val = nodeVal;
-        b->left = below(numofParam,count+1,fvalues);
-        b->right = below(numofParam,count+1,fvalues);
-    }
-    return b; 
-} 
+    std::vector<std::string>fvaluesNew; 
 
-std::vector<std::string> rearrangeInputs (std::vector<std::string>fvalues) {
-    //rearrange fvalues to new order:
-    std::vector<std::string>fvaluesNew; //new vector that will contain all the rearranged fvalues
-    std::vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
+    std::vector<int>varOrder = rearrangeOrder(NumOfVar, fvalues); 
 
     for(int n = 0; n<fvalues.size(); n++) {
 
         std::string elementNew = "";
-        
-        for(int m = 0; m<fvalues[0].size(); m++) {
-            elementNew.push_back(fvalues[n][arrangeParam[m]]);
+
+        for(int m = 0; m<NumOfVar; m++) {
+            elementNew.push_back(fvalues[n][varOrder[m]]);
         }
-
-        fvaluesNew.push_back(elementNew); //so new rearranged word is inputted into fvaluesNew;
+        
+        fvaluesNew.push_back(elementNew); 
     }
-    return fvaluesNew; //rearranged fvalues
-
+    return fvaluesNew; 
 }
+//Rearranging Algorithm End
+//Function used to construct tree and assign variables (x1,x2,x3...) to nodes
+BNode* construct (int NumOfVar, int count, std::vector<std::string>fvalues) {
+    BNode* b; 
+    b = new BNode; 
+    std::vector<int>varOrder = rearrangeOrder(NumOfVar, fvalues); 
 
-BNode* parserChecker (BNode* pntr) { 
+    if (count==NumOfVar) { 
+        b->val = "0";
+        b->left = nullptr;
+        b->right = nullptr;
+    }
+
+    else { 
+        std::string nodeVal = "x"+std::to_string(varOrder[count]+1);
+        b->val = nodeVal;
+        b->left = construct(NumOfVar,count+1,fvalues);
+        b->right = construct(NumOfVar,count+1,fvalues);
+    }
+    return b; 
+} 
+//Identical Leaf Algorithm Start
+BNode* compareLeaf (BNode* pntr) { 
     if(pntr->left==nullptr && pntr->right==nullptr) {
         return pntr;
     }
     
     else if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) { //why do we need this condition? because are only considering values in leaves not branch nodes
+        
         if((pntr->left->val) == (pntr->right->val)) {
-
-            pntr->val = pntr->left->val; //so we reassign value of parent
-            //so we set the children nodes to nullptr
+            pntr->val = pntr->left->val;
             pntr->left = nullptr;
             pntr->right = nullptr; 
-            //execute function to simplify tree
         }
+
     }
     
     else {
-        pntr->left = parserChecker(pntr->left);
-        pntr->right = parserChecker(pntr->right); //fine no stack overflow
-        //parserChecker(pntr->left);
+        pntr->left = compareLeaf(pntr->left);
+        pntr->right = compareLeaf(pntr->right);
     }
     return pntr;
 }
 
-BNode* repeatCheck (int numofParam, BNode* currentpntr) { 
+BNode* identicalLeaf (int NumOfVar, BNode* currentpntr) { 
 
-    for (int i = 0; i<numofParam; i++) { 
-        currentpntr = parserChecker(currentpntr); 
+    for (int i = 0; i<NumOfVar; i++) { 
+        currentpntr = compareLeaf(currentpntr); 
     }
-    return currentpntr; //this is the address of the head of the simplified tree
+    return currentpntr;
 }
+//Identical Leaf Algorithm End
+
+//Identical Tree Algorithm Start
 int compareTree (BNode* a, BNode* b) {
 
     if (a == nullptr && b == nullptr) {
         return 1; 
     }
     else if (a->val==b->val) {
-        return (compareTree(a->left, b->left) && compareTree(a->right, b->right)); //so bool func, if one of them is not equal then output is false
+        return (compareTree(a->left, b->left) && compareTree(a->right, b->right));
     }
     else {
         return 0;
     }
 }
 
-BNode* finalSimplify (BNode* pntr) {
+BNode* identicalTree (BNode* pntr) {
 
     if (compareTree(pntr->left,pntr->right)) { 
-    
-        while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) { //we need nullptr condition in while loop as we cant check for null outside while loop
+
+        while (compareTree(pntr->left,pntr->right)==1 && (pntr->left!=nullptr) && (pntr->right!=nullptr)) {
             pntr = pntr->left; 
         }
-        return pntr; //pntr->left is going to be the new head of the tree
+        return pntr;
     }
-    //else if (pntr->left==nullptr && pntr->right==nullptr) {
-    //    return pntr;
-    //}
+
     else { 
-        pntr->left = finalSimplify(pntr->left);
-        pntr->right = finalSimplify(pntr->right);
+        pntr->left = identicalTree(pntr->left);
+        pntr->right = identicalTree(pntr->right);
         return pntr; 
     }
 }
+//Identical Tree Algorithm End
 
 void printBT(const std::string& prefix, const BNode* node, bool isLeft) {
     if( node != nullptr )
@@ -267,20 +242,21 @@ void printBT2(const BNode* node) {
     printBT("", node, false);    
 }
 
-BNode* build_bt(const std::vector<std::string>& fvalues) { //remember its referenced so vector<string> &fvalues
+BNode* build_bt(const std::vector<std::string>& fvalues) {
 
-    std::vector<std::string>fvaluesNew = rearrangeInputs(fvalues); 
+    int NumOfVar = (fvalues[0]).size();
 
-    int numofParam = (fvalues.at(0)).size(); 
+    std::vector<std::string>fvaluesNew = rearrangeInputs(NumOfVar, fvalues); 
 
-    BNode* topN = below(numofParam,0,fvalues); 
-    BNode* currentpntr = checker(topN, fvaluesNew); //USES find_direction
-    currentpntr = repeatCheck(numofParam, currentpntr); 
-    return finalSimplify(currentpntr); //outputs fully simplified tree
+    BNode* topN = construct(NumOfVar,0,fvalues); 
+
+    BNode* currentpntr = assignLeaf(topN, fvaluesNew);
     
+    currentpntr = identicalLeaf(NumOfVar, currentpntr); 
+
+    return identicalTree(currentpntr); 
 }
 
-//given function
 int label_to_idx(const std::string& label){
  
     std::string out;
@@ -291,7 +267,7 @@ int label_to_idx(const std::string& label){
  
     return std::stoi(out) - 1;
 }
-//given function
+
 std::string eval_bt(BNode* bt, const std::string& input){
  
     if( (bt->left == NULL) && (bt->right == NULL) ){
@@ -316,6 +292,15 @@ void deallocate_tree(BNode* t) {
           deallocate_tree(t->left);
           deallocate_tree(t->right);
           delete t;
+    }
+}
+
+int n_nodes_bt(BNode* t){
+    if(t == NULL){
+        return 0;
+    }
+    else{
+        return 1 + n_nodes_bt(t->left) + n_nodes_bt(t->right);
     }
 }
 
