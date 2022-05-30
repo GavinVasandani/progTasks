@@ -379,10 +379,10 @@ int main(){
     cout << ft1.eval("11") << endl;
     // this should print "1"
  
-    cout << ft2.eval("0000") << endl;
+    cout << ft2.eval("000") << endl;
     // this should print "0"
  
-    cout << ft2.eval("1111") << endl;
+    cout << ft2.eval("111") << endl;
     // this should print "1"
  
 }

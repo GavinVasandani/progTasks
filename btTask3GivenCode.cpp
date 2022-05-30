@@ -129,37 +129,7 @@ int main(){
     std::vector<std::string> fv;
     std::string row;
  
-    row = "00000";
-    fv.push_back(row);
-    row = "00001";
-    fv.push_back(row);
-    row = "00010";
-    fv.push_back(row);
-    row = "00011";
-    fv.push_back(row);
-    row = "00100";
-    fv.push_back(row);
-    row = "00101";
-    fv.push_back(row);
-    row = "00110";
-    fv.push_back(row);
-    row = "00111";
-    fv.push_back(row);
-    row = "01000";
-    fv.push_back(row);
-    row = "01001";
-    fv.push_back(row);
-    row = "01010";
-    fv.push_back(row);
-    row = "01011";
-    fv.push_back(row);
-    row = "01100";
-    fv.push_back(row);
-    row = "01101";
-    fv.push_back(row);
-    row = "01110";
-    fv.push_back(row);
-    row = "01111";
+    row = "11";
     fv.push_back(row);
  
     BoolTree ft1(fv);
@@ -189,10 +159,10 @@ int main(){
     // for the boolean function we are considering
     // then this will print 3 (see tree diagram in the example above)
  
-    std::cout << ft1.eval("01000") << std::endl;
+    std::cout << ft1.eval("01") << std::endl;
     // this should print "0" 
  
-    std::cout << ft1.eval("11000") << std::endl;
+    std::cout << ft1.eval("11") << std::endl;
     // this should print "1"
  
     std::cout << ft2.eval("001") << std::endl;
