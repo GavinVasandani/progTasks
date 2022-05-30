@@ -9,6 +9,7 @@ struct BNode{
     BNode* right;
 
 };
+
 //Function to split input into separate strings
 std::vector<std::string> findDirection(std::string word){
 
@@ -24,6 +25,7 @@ std::vector<std::string> findDirection(std::string word){
     }
     return direction;
 }
+
 //Function to reassign leaf value based on input combination
 void updateVal (BNode* pntr, std::vector<std::string>direction, int i) {
 
@@ -38,6 +40,7 @@ void updateVal (BNode* pntr, std::vector<std::string>direction, int i) {
     }
 
 }
+
 //Function used to connect the 2 functions: findDirection and UpdateVal
 BNode* assignLeaf (BNode* t, std::vector<std::string> fvalues) {
 
@@ -47,6 +50,7 @@ BNode* assignLeaf (BNode* t, std::vector<std::string> fvalues) {
     }
     return t;
 }
+
 //Function takes in input and traverses through tree to check if output is 0 or 1
 std::string checker (BNode* pntr, std::vector<std::string>direction, int i) {
 
@@ -61,6 +65,7 @@ std::string checker (BNode* pntr, std::vector<std::string>direction, int i) {
     }
 
 } 
+
 //Rearranging Algorithm Start
 std::vector<int> rearrangeOrder (int NumOfVar, std::vector<std::string>fvalues) {
 
@@ -139,6 +144,7 @@ std::vector<std::string> rearrangeInputs (int NumOfVar, std::vector<std::string>
     return fvaluesNew; 
 }
 //Rearranging Algorithm End
+
 //Function used to construct tree and assign variables (x1,x2,x3...) to nodes
 BNode* construct (int NumOfVar, int count, std::vector<std::string>fvalues) {
     BNode* b; 
@@ -159,13 +165,14 @@ BNode* construct (int NumOfVar, int count, std::vector<std::string>fvalues) {
     }
     return b; 
 } 
+
 //Identical Leaf Algorithm Start
 BNode* compareLeaf (BNode* pntr) { 
     if(pntr->left==nullptr && pntr->right==nullptr) {
         return pntr;
     }
     
-    else if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) { //why do we need this condition? because are only considering values in leaves not branch nodes
+    else if((pntr->left->left == nullptr) && (pntr->left->right == nullptr) && (pntr->right->left == nullptr) && (pntr->right->right == nullptr)) {
         
         if((pntr->left->val) == (pntr->right->val)) {
             pntr->val = pntr->left->val;

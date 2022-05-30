@@ -343,14 +343,24 @@ int main(){
  
     fv.clear();
  
-    row = "1001";
-    fv.push_back(row);
-    row = "1011";
-    fv.push_back(row);
-    row = "1101";
-    fv.push_back(row);
+    row = "0001";
+    fv.push_back("0001");
     row = "1111";
-    fv.push_back(row);
+	fv.push_back("1111");
+    row = "1110";
+	fv.push_back("1110");
+    row = "0111";
+	fv.push_back("0111");
+    row = "0110";
+	fv.push_back("0110");
+    row = "0010";
+	fv.push_back("0010");
+    row = "1101";
+	fv.push_back("1101");
+    row = "1010";
+	fv.push_back("1010");
+    row = "0101";
+	fv.push_back("0101");
 
     BoolTree ft2(fv);
     // this corresponds to the f(x1, x2, x3) example shown above
@@ -369,7 +379,7 @@ int main(){
     std::cout << ft1.eval("11") << std::endl;
     // this should print "1"
  
-    std::cout << ft2.eval("0001") << std::endl;
+    std::cout << ft2.eval("0000") << std::endl;
     // this should print "0"
 
     std::cout << ft2.eval("1111") << std::endl;
