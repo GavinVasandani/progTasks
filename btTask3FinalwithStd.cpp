@@ -6,18 +6,20 @@
 #include <fstream>
 #include <chrono> //REMOVE BEFORE TAKING ON REPLIT
 
-using namespace std; //REMOVE
+//using namespace std; //REMOVE
 
 struct BNode{
-    string val;    
+
+    std::string val;    
     BNode* left;
     BNode* right;
+
 };
 
-vector<string> find_direction(string word){
+std::vector<std::string> find_direction(std::string word){
  //this needs to loop for every letter in the element
-    string word_i;
-    vector<string>direction; //list containing what direction to go in (1 = R, 0 = L)
+    std::string word_i;
+    std::vector<std::string>direction; //list containing what direction to go in (1 = R, 0 = L)
  
     for(int i = 0; i < word.size(); i++){ //word.size() tells us the number of parameters 
  
@@ -29,7 +31,7 @@ vector<string> find_direction(string word){
     return direction;
 }
 
-void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
+void updateVal (BNode* pntr, std::vector<std::string>direction, int i) { //so output of this gives the final tree that has all the 1s in the leaves which are given based on input combo
 
     if((pntr->right == nullptr) && (pntr->left == nullptr)) { 
         pntr->val = "1";
@@ -44,18 +46,18 @@ void updateVal (BNode* pntr, vector<string>direction, int i) { //so output of th
 
 }
 
-BNode* checker (BNode* t, vector<string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
+BNode* checker (BNode* t, std::vector<std::string> fvalues) { //will be necessary to see whether 1 so we go R or 0 we go left
 
   for (int i = 0; i<fvalues.size(); i++) { //iterates through vector of values that give ouput 1
 
-    vector<string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
+    std::vector<std::string>direction = find_direction(fvalues.at(i)); //makes individual vector for each answer and splits into 2 so '01' becomes '0','1' and this is stored in 1 vector
     updateVal(t,direction,0);
     
     }
     return t; //outputs the pointer holding address of the top node of the tree
 }
 
-string parser (BNode* pntr, vector<string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
+std::string parser (BNode* pntr, std::vector<std::string>direction, int i) { //this checks whether the input combo of 0,1s gives 0 or 1
     //outputs the value of the bottom node
 
     if((pntr->left == nullptr) && (pntr->right == nullptr)) { //should both be nullptr or is 1 enough?
@@ -84,9 +86,9 @@ int n_nodes_bt(BNode* t){
 }
 
 //Arranger Code. Rename this func name to something that better represents what it does
-vector<int> commonTerm (vector<string>fvalues) {
+std::vector<int> commonTerm (std::vector<std::string>fvalues) {
 
-   vector<int>numofComTerms;
+   std::vector<int>numofComTerms;
 
     for (int k = 0; k<fvalues[0].size(); k++) { //fvalues.at(1).size() works
         
@@ -96,7 +98,7 @@ vector<int> commonTerm (vector<string>fvalues) {
 
         for (int j = 0; j<fvalues.size(); j++) {
             
-            string word = "";
+            std::string word = "";
             word.push_back(fvalues[j][k]);
 
             if(word == "1") { //fvalues.at(j)[k] works. Use stoi() as contents of fvalues are strings to must convert to int for comparison with 1
@@ -116,7 +118,7 @@ vector<int> commonTerm (vector<string>fvalues) {
 
     }
 
-    vector<int>arrangeParam;
+    std::vector<int>arrangeParam;
     int temp0 = 0;
     int temp1 = 0;
 
@@ -145,10 +147,10 @@ vector<int> commonTerm (vector<string>fvalues) {
     return arrangeParam;
 }
 
-BNode* below (int numofParam, int count, vector<string>fvalues) { //this builds the full tree and by default assigns value = 0 for each node
+BNode* below (int numofParam, int count, std::vector<std::string>fvalues) { //maybe rename to children so func name is children not below //this builds the full tree and by default assigns value = 0 for each node
     BNode* b; //pointer b which holds address to a variable that is type BNode
     b = new BNode; //pointer holds address to a temporary variable (new) BNode
-    vector<int>arrangeParam = commonTerm(fvalues); //maybe change to rearrageParam so more clear
+    std::vector<int>arrangeParam = commonTerm(fvalues); //maybe change to rearrageParam so more clear
 
     if (count==numofParam) { //so loop ends once count = number of parameters
         b->val = "0";
@@ -156,7 +158,7 @@ BNode* below (int numofParam, int count, vector<string>fvalues) { //this builds 
         b->right = nullptr;
     }
     else { 
-        string nodeVal = "x"+to_string(arrangeParam[count]+1); //we add +1 again as arrangeParam is 0-3 so to get it from 1 onwards then must add 1 so now 1-4.
+        std::string nodeVal = "x"+std::to_string(arrangeParam[count]+1); //we add +1 again as arrangeParam is 0-3 so to get it from 1 onwards then must add 1 so now 1-4.
         b->val = nodeVal;
         b->left = below(numofParam,count+1,fvalues);
         b->right = below(numofParam,count+1,fvalues);
@@ -164,14 +166,14 @@ BNode* below (int numofParam, int count, vector<string>fvalues) { //this builds 
     return b; 
 } 
 
-vector<string> rearrangeInputs (vector<string>fvalues) {
+std::vector<std::string> rearrangeInputs (std::vector<std::string>fvalues) {
     //rearrange fvalues to new order:
-    vector<string>fvaluesNew; //new vector that will contain all the rearranged fvalues
-    vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
+    std::vector<std::string>fvaluesNew; //new vector that will contain all the rearranged fvalues
+    std::vector<int>arrangeParam = commonTerm(fvalues); //this gets arrangeParam into our function to use
 
     for(int n = 0; n<fvalues.size(); n++) {
 
-        string elementNew = "";
+        std::string elementNew = "";
         
         for(int m = 0; m<fvalues[0].size(); m++) {
             elementNew.push_back(fvalues[n][arrangeParam[m]]);
@@ -246,15 +248,15 @@ BNode* finalSimplify (BNode* pntr) {
     }
 }
 
-void printBT(const string& prefix, const BNode* node, bool isLeft) {
+void printBT(const std::string& prefix, const BNode* node, bool isLeft) {
     if( node != nullptr )
     {
-        cout << prefix;
+        std::cout << prefix;
 
-        cout << (isLeft ? "├──" : "└──" );
+        std::cout << (isLeft ? "├──" : "└──" );
 
         // print the value of the node
-        cout << node->val << endl;
+        std::cout << node->val << std::endl;
 
         // enter the next tree level - left and right branch
         printBT( prefix + (isLeft ? "│   " : "    "), node->right, true);
@@ -265,9 +267,9 @@ void printBT2(const BNode* node) {
     printBT("", node, false);    
 }
 
-BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so vector<string> &fvalues
+BNode* build_bt(const std::vector<std::string>& fvalues) { //remember its referenced so vector<string> &fvalues
 
-    vector<string>fvaluesNew = rearrangeInputs(fvalues); 
+    std::vector<std::string>fvaluesNew = rearrangeInputs(fvalues); 
 
     int numofParam = (fvalues.at(0)).size(); 
 
@@ -279,25 +281,25 @@ BNode* build_bt(const vector<string>& fvalues) { //remember its referenced so ve
 }
 
 //given function
-int label_to_idx(const string& label){
+int label_to_idx(const std::string& label){
  
-    string out;
+    std::string out;
  
     for(int i = 1; i < label.size(); i++){
         out.push_back(label[i]);
     }
  
-    return stoi(out) - 1;
+    return std::stoi(out) - 1;
 }
 //given function
-string eval_bt(BNode* bt, const string& input){
+std::string eval_bt(BNode* bt, const std::string& input){
  
     if( (bt->left == NULL) && (bt->right == NULL) ){
         return bt->val;
     }
     else{
         int idx = label_to_idx(bt->val);
-        string input_idx;
+        std::string input_idx;
         input_idx.push_back(input[idx]);
  
         if(input_idx == "0"){
@@ -320,12 +322,12 @@ void deallocate_tree(BNode* t) {
 class BoolTree{
 public:
  
-    BoolTree(const vector<string>& fvalues){
+    BoolTree(const std::vector<std::string>& fvalues){
        t = build_bt(fvalues);
        printBT2(t); //REMOVE 
     }
  
-    std::string eval(const string& s){
+    std::string eval(const std::string& s){
         return eval_bt(t, s);
     }
  
@@ -343,8 +345,8 @@ private:
 
 int main(){
  
-    vector<string> fv;
-    string row;
+    std::vector<std::string> fv;
+    std::string row;
  
     row = "11";
     fv.push_back(row);
@@ -368,23 +370,24 @@ int main(){
     BoolTree ft2(fv);
     // this corresponds to the f(x1, x2, x3) example shown above
  
-    cout << "Number of nodes in tree 1 is: "<<ft1.n_nodes() << endl;
+    std::cout << ft1.n_nodes() << std::endl;
     // we expect this to print 5
  
-    cout << "Number of nodes in tree 2 is: "<< ft2.n_nodes() << endl;
+    std::cout << ft2.n_nodes() << std::endl;
     // if the algorithm is such that it builds the smallest possible corresponding tree
     // for the boolean function we are considering
     // then this will print 3 (see tree diagram in the example above)
  
-    cout <<ft1.eval("01") << endl;
+    std::cout <<ft1.eval("01") << std::endl;
     // this should print "0" 
 
-    cout << ft1.eval("11") << endl;
+    std::cout << ft1.eval("11") << std::endl;
     // this should print "1"
  
-    cout << ft2.eval("001") << endl;
+    std::cout << ft2.eval("001") << std::endl;
     // this should print "0"
-    cout << ft2.eval("110") << endl;
+
+    std::cout << ft2.eval("110") << std::endl;
     // this should print "1"
  
 }
