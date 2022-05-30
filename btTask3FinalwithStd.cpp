@@ -343,13 +343,13 @@ int main(){
  
     fv.clear();
  
-    row = "010";
+    row = "1001";
     fv.push_back(row);
-    row = "011";
+    row = "1011";
     fv.push_back(row);
-    row = "110";
+    row = "1101";
     fv.push_back(row);
-    row = "111";
+    row = "1111";
     fv.push_back(row);
 
     BoolTree ft2(fv);
@@ -369,10 +369,10 @@ int main(){
     std::cout << ft1.eval("11") << std::endl;
     // this should print "1"
  
-    std::cout << ft2.eval("001") << std::endl;
+    std::cout << ft2.eval("0001") << std::endl;
     // this should print "0"
 
-    std::cout << ft2.eval("110") << std::endl;
+    std::cout << ft2.eval("1111") << std::endl;
     // this should print "1"
  
 }
